@@ -60,6 +60,15 @@ h2.big{font-family:Newsreader,serif;font-weight:400;font-size:clamp(2.4rem,5vw,3
 .chip{padding:14px 26px;border-radius:99px;border:1.5px solid var(--line);background:transparent;font:inherit;font-size:.95rem;cursor:pointer;transition:.2s}
 .chip:hover{border-color:var(--purple)}
 .chip.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.concern-section{padding:55px 0 35px;border-bottom:1px solid var(--line)}
+.concern-head{display:flex;justify-content:space-between;align-items:flex-end;gap:18px;flex-wrap:wrap;margin-bottom:20px}
+.concern-head h2{font-family:Newsreader,serif;font-weight:400;font-size:clamp(2.1rem,4.5vw,3.2rem);line-height:1.05;margin:8px 0}
+.concern-head p{color:var(--muted);font-size:.9rem;max-width:680px}
+.concern-list{display:flex;flex-wrap:wrap;gap:8px}
+.concern-term{border:1px solid var(--line);border-radius:99px;padding:9px 13px;background:var(--card);color:var(--ink);font:inherit;font-size:.78rem;cursor:pointer}
+.concern-term:hover,.concern-term.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.concern-result{font-size:.78rem;color:var(--muted);margin-top:13px}
+.ai-mini{font-size:10px!important;line-height:1.5!important;color:var(--muted)!important;margin:8px 0!important}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:24px}
 .card{background:var(--card);border:1.5px solid var(--line);padding:24px;display:flex;flex-direction:column;transition:.3s}
 .card:hover{transform:translateY(-6px);box-shadow:0 30px 50px -30px rgba(80,50,110,.35)}
@@ -208,7 +217,7 @@ dialog .pill{margin-top:12px}
   </div>
 </div></section>
 
-<section id="concernFinder" class="concern-section"></section>
+<section id="concernFinder" class="concern-section"><div class="wrap"><div class="concern-head"><div><div class="kick">Find by concern</div><h2>What would you like help with?</h2><p>Choose a concern or search for it below to see relevant products in the directory. These are starting points, not treatments or guarantees.</p></div><button type="button" class="concern-term" id="clearConcern">Show everything</button></div><div class="concern-list" id="concernList"></div><p class="concern-result" id="concernResult" aria-live="polite">Choose a concern to filter the directory.</p></div></section>
 <section id="shelf"><div class="wrap">
   <div class="kick">The discovery shelf</div>
   <h2 class="big reveal">Find your next favourite.</h2>
@@ -487,9 +496,34 @@ let goal=GOALS[0];
 const $=s=>document.querySelector(s), esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 $("#chips").innerHTML=GOALS.map(g=>`<button class="chip ${g===goal?"on":""}" data-g="${esc(g)}">${esc(g)}</button>`).join("");
 $("#chips").addEventListener("click",e=>{const b=e.target.closest(".chip");if(!b)return;goal=b.dataset.g;document.querySelectorAll(".chip").forEach(x=>x.classList.toggle("on",x===b));render()});
+const CONCERN_MAP=[
+{label:"Dry skin",terms:["dry skin","very dry","dryness","flaking","dry patches"],products:["CeraVe|Moisturising Cream","La Roche-Posay|Cicaplast Baume B5+","Aestura|Atobarrier 365 Cream"]},
+{label:"Dehydration & hydration",terms:["dehydrated","dehydration","hydration","hydrating","tight skin","plump"],products:["COSRX|Advanced Snail 96 Mucin Essence","Torriden|DIVE-IN Hyaluronic Acid Serum","Anua|Heartleaf 77 Soothing Toner","CeraVe|Moisturising Cream","Bubble Skincare|Slam Dunk Hydrating Moisturiser"]},
+{label:"Dark spots & hyperpigmentation",terms:["dark spots","hyperpigmentation","post-acne marks","acne marks","PIH","uneven tone","dullness","glow"],products:["The Ordinary|Niacinamide 10% + Zinc 1%","La Roche-Posay|Pure Vitamin C10 Serum","Geek & Gorgeous|C-Glow","SKIN1004|Hyalu-Cica Water-Fit Sun Serum"]},
+{label:"Redness & sensitivity",terms:["redness","sensitive","sensitivity","reactive","irritation"],products:["SKIN1004|Madagascar Centella Ampoule","Anua|Heartleaf 77 Soothing Toner","La Roche-Posay|Cicaplast Baume B5+","Aestura|Atobarrier 365 Cream"]},
+{label:"Barrier support",terms:["skin barrier","barrier repair","compromised barrier","eczema-prone","tightness"],products:["La Roche-Posay|Cicaplast Baume B5+","Aestura|Atobarrier 365 Cream","CeraVe|Moisturising Cream","SKIN1004|Madagascar Centella Ampoule"]},
+{label:"Blemishes & clogged pores",terms:["blemishes","acne","breakouts","blackheads","clogged pores","spots"],products:["Paula's Choice|Skin Perfecting 2% BHA Liquid","The Ordinary|Niacinamide 10% + Zinc 1%","Anua|Heartleaf 77 Soothing Toner","Some By Mi|AHA BHA PHA 30 Days Miracle Toner","PanOxyl|Acne Foaming Wash 4%"]},
+{label:"Oiliness & visible pores",terms:["oily skin","oiliness","visible pores","large pores","shine"],products:["The Ordinary|Niacinamide 10% + Zinc 1%","Paula's Choice|Skin Perfecting 2% BHA Liquid","Anua|Heartleaf 77 Soothing Toner"]},
+{label:"Texture & roughness",terms:["rough texture","rough skin","uneven texture"],products:["Paula's Choice|Skin Perfecting 2% BHA Liquid","The Ordinary|Niacinamide 10% + Zinc 1%","Some By Mi|AHA BHA PHA 30 Days Miracle Toner"]},
+{label:"Sun protection",terms:["spf","sunscreen","sun protection"],products:["SKIN1004|Hyalu-Cica Water-Fit Sun Serum"]},
+{label:"Puffiness",terms:["puffy eyes","puffiness","depuffing"],products:["TheraFace|Depuffing Wand","Shark|CryoGlow LED Face Mask","SKYNTHESIS edit|Rose Quartz Gua Sha Stone"]},
+{label:"Fine lines & firmness",terms:["fine lines","firmness","led mask","anti-ageing","anti aging"],products:["CurrentBody|Skin LED Mask","Omnilux|Contour Face LED Mask","Shark|CryoGlow LED Face Mask"]},
+{label:"At-home devices",terms:["device","devices","led","gua sha"],products:["Shark|CryoGlow LED Face Mask","TheraFace|Depuffing Wand","CurrentBody|Skin LED Mask","Omnilux|Contour Face LED Mask","SKYNTHESIS edit|Rose Quartz Gua Sha Stone"]},
+{label:"Beauty gifts & advent calendars",terms:["beauty gifts","advent","calendar","k-beauty gift"],products:["Lookfantastic|12 Days of K-Beauty","ASOS|Face + Body Advent Calendar","M&S|Beauty Advent Calendar","Sephora|Favorites Advent Calendar","Lookfantastic|Beauty Advent Calendar"]}
+];
+let selectedConcern=null;
+const concernList=$("#concernList");
+concernList.innerHTML=CONCERN_MAP.map((c,i)=>'<button type="button" class="concern-term" data-concern="'+i+'">'+esc(c.label)+'</button>').join("");
+function chooseConcern(index){selectedConcern=index===null?null:CONCERN_MAP[index];goal=GOALS[0];$("#q").value="";document.querySelectorAll(".chip").forEach(b=>b.classList.toggle("on",b.dataset.g===goal));concernList.querySelectorAll("button").forEach(b=>b.classList.toggle("on",Number(b.dataset.concern)===index));$("#concernResult").textContent=selectedConcern?"Showing products for "+selectedConcern.label+".":"Showing all products.";render();if(selectedConcern)$("#shelf").scrollIntoView({behavior:"smooth",block:"start"});}
+concernList.addEventListener("click",e=>{const b=e.target.closest("button[data-concern]");if(b)chooseConcern(Number(b.dataset.concern));});
+$("#clearConcern").addEventListener("click",()=>chooseConcern(null));
+
 function render(){
   const q=$("#q").value.trim().toLowerCase();
-  const list=PRODUCTS.filter(p=>(goal===GOALS[0]||p.goal===goal)&&`${p.name} ${p.brand} ${p.goal} ${p.blurb}`.toLowerCase().includes(q));
+  const queryConcern=selectedConcern||CONCERN_MAP.find(c=>c.terms.some(term=>q&&(term.includes(q)||q.includes(term))));
+  const allowed=queryConcern?queryConcern.products:null;
+  const searchQ=queryConcern&&q&&queryConcern.terms.some(term=>term.includes(q)||q.includes(term))?"":q;
+  const list=PRODUCTS.filter(p=>(goal===GOALS[0]||p.goal===goal)&&(!allowed||allowed.includes(p.brand+"|"+p.name))&&`${p.name} ${p.brand} ${p.goal} ${p.blurb}`.toLowerCase().includes(searchQ));
   $("#grid").innerHTML=list.length?list.map(p=>`
   <article class="card">
     <div class="art" style="background:linear-gradient(150deg,${p.tone[0]},${p.tone[1]})">
@@ -500,11 +534,11 @@ function render(){
 <div class="cbrand">${esc(p.brand)} · Editorial pick</div>
     <h3>${esc(p.name)}</h3>
     <p>${esc(p.blurb)}</p>
-    <div class="ill"><span>Product-specific retailer page</span></div>
-<a class="pill" href="${esc(p.link)}" target="_blank" rel="noopener noreferrer">View product ↗</a>
+    <div class="ill"><span>${p.link.includes("link.amazon/")?"Affiliate link · commission may be earned":"Brand / retailer link"}</span></div>
+<a class="pill" href="${esc(p.link)}" target="_blank" rel="${p.link.includes("link.amazon/")?"sponsored nofollow noopener noreferrer":"noopener noreferrer"}">${p.link.includes("link.amazon/")?"View affiliate link ↗":"View product ↗"}</a>
   </article>`).join(""):`<div class="empty">No matches — try another search.</div>`;
 }
-$("#q").addEventListener("input",render);render();
+$("#q").addEventListener("input",()=>{selectedConcern=null;concernList.querySelectorAll("button").forEach(b=>b.classList.remove("on"));render();});render();
 
 const PAGES={
  about:["About SKYNTHESIS","<p>SKYNTHESIS is an independent skincare discovery site. We pair ingredient-led guides with a curated shelf so choosing skincare feels calmer and clearer.</p><p>We're not a retailer and don't sell products directly.</p>"],
