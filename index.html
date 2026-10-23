@@ -64,6 +64,7 @@ h2.big{font-family:Newsreader,serif;font-weight:400;font-size:clamp(2.4rem,5vw,3
 .card{background:var(--card);border:1.5px solid var(--line);padding:24px;display:flex;flex-direction:column;transition:.3s}
 .card:hover{transform:translateY(-6px);box-shadow:0 30px 50px -30px rgba(80,50,110,.35)}
 .art{aspect-ratio:1;position:relative;display:grid;place-items:center}
+.product-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;padding:18px;background:#fff;z-index:1}.tag{z-index:2}.bt{z-index:0}
 .tag{position:absolute;top:18px;left:18px;background:#fff;padding:9px 14px;font-size:.7rem;letter-spacing:.18em;text-transform:uppercase}
 .bt{width:20%;height:42%;border-radius:20px;position:relative;box-shadow:0 30px 30px -14px rgba(0,0,0,.22);display:grid;place-items:center;margin-top:12%}
 .bt::before{content:"";position:absolute;top:-19%;left:20%;width:60%;height:20%;background:#a79fae;border-radius:3px 3px 0 0}
@@ -261,7 +262,7 @@ const PRODUCTS = [  {
     blurb:"A balm-style option for targeted areas of dryness and discomfort. Consider texture and how it fits your routine.",
     label:["CICAPLAST","B5+"], tone:["#e8e3ef","#d3c8df"],
     bottle:["#d8d1e2","#fff","#c8bfd5"],
-    link:"https://www.laroche-posay.co.uk/"
+    link:"https://www.laroche-posay.co.uk/en_GB/cicaplast-baume-b5-repairing-balm/LRP_035.html"
   },
   {
     goal:"Barrier support", tag:"K-beauty favourite",
@@ -269,7 +270,7 @@ const PRODUCTS = [  {
     blurb:"A moisturiser to explore if you are interested in Korean barrier-care formulas. Check the current ingredient list and texture before buying.",
     label:["AESTURA","365 CREAM"], tone:["#eee4d7","#d8c5b1"],
     bottle:["#c7b6a1","#fffaf3","#b7a28c"],
-    link:"https://global.aestura.com/"
+    link:"https://int.aestura.com/products/atobarrier365-cream"
   },
   {
     goal:"Glow & tone", tag:"Exfoliating liquid",
@@ -277,7 +278,7 @@ const PRODUCTS = [  {
     blurb:"A leave-on salicylic acid exfoliant commonly used for clogged pores. Introduce gradually and avoid over-exfoliating.",
     label:["PAULA'S","CHOICE"], tone:["#e9e4ef","#d4c7e2"],
     bottle:["#b5a5cf","#fff","#a493bd"],
-    link:"https://www.paulaschoice.co.uk/"
+    link:"https://www.paulaschoice.co.uk/skin-perfecting-bha-liquid-exfoliant/92010.html"
   },
   {
     goal:"Hydration", tag:"K-beauty favourite",
@@ -301,7 +302,7 @@ const PRODUCTS = [  {
     blurb:"A watery toner associated with Korean skincare routines. Toners are optional, so consider whether it adds something useful to yours.",
     label:["ANUA","HEARTLEAF"], tone:["#e7ece2","#cdd9c3"],
     bottle:["#aab99e","#fff","#95a88a"],
-    link:"https://anua.us/"
+    link:"https://www.sephora.co.uk/brands/anua"
   },
   {
     goal:"Hydration", tag:"Hydration serum",
@@ -309,7 +310,7 @@ const PRODUCTS = [  {
     blurb:"A hydration-focused serum to compare with other humectant-rich options. A serum is not a substitute for moisturiser if your skin needs one.",
     label:["TORRIDEN","DIVE-IN"], tone:["#dfeaf0","#bed5e2"],
     bottle:["#90b7ca","#f7fcff","#7ea7bb"],
-    link:"https://torriden.com/"
+    link:"https://torriden.us/collections/hyaluronic-acid-dive-in"
   },
   {
     goal:"Barrier support", tag:"Moisturiser",
@@ -317,7 +318,7 @@ const PRODUCTS = [  {
     blurb:"A Korean moisturiser worth researching if you prefer lighter cream textures. Check the current formula and retailer listing.",
     label:["Dr.G","RED BLEMISH"], tone:["#e7e8ef","#cbd0e2"],
     bottle:["#b2b9d0","#fff","#9ca7c4"],
-    link:"https://dr-g.co.kr/"
+    link:"https://www.dr-g.com/collections/aclear/products/dr-g-red-blemish-clear-soothing-cream"
   },
   {
     goal:"Glow & tone", tag:"Niacinamide",
@@ -333,7 +334,7 @@ const PRODUCTS = [  {
     blurb:"Hydrocolloid patches can help protect some surface blemishes and absorb fluid. They are not a treatment for every type of acne.",
     label:["HERO","MIGHTY PATCH"], tone:["#f0e5e8","#dfc5ce"],
     bottle:["#d8b5c2","#fff8fa","#c59eae"],
-    link:"https://herocosmetics.us/"
+    link:"https://www.herocosmetics.co.uk/collections/all"
   },
   {
     goal:"Daily cleanse", tag:"Cleansing staple",
@@ -365,7 +366,7 @@ const PRODUCTS = [  {
     blurb:"A hypochlorous-acid spray to explore for a simple skincare routine. Check the retailer's current ingredients, directions and UK shipping.",
     label:["TOWER 28","SOS SPRAY"], tone:["#e3e9ee","#c9d7e0"],
     bottle:["#a8c1d0","#fff","#93b2c4"],
-    link:"https://www.tower28beauty.com/"
+    link:"https://www.tower28beauty.com/products/sos-daily-rescue-facial-spray"
   },
   {
     goal:"Hydration", tag:"Glass-skin edit",
@@ -381,7 +382,7 @@ const PRODUCTS = [  {
     blurb:"A cleanser to consider when comparing straightforward daily cleansing options. Check the current product details and price before purchasing.",
     label:["DR SAM'S","CLEANSER"], tone:["#e9e5f0","#d4cbe3"],
     bottle:["#b6a9cd","#fff","#a194bd"],
-    link:"https://drsambunting.com/"
+    link:"https://drsambunting.com/products/flawless-cleanser"
   },
   {
     goal:"Hydration", tag:"Everyday moisturiser",
@@ -389,7 +390,7 @@ const PRODUCTS = [  {
     blurb:"A daily moisturiser option to compare by texture, ingredients, pack size and cost per gram.",
     label:["BUBBLE","SLAM DUNK"], tone:["#e6e8f2","#cbd3ed"],
     bottle:["#b6c2ed","#fff","#a2b0df"],
-    link:"https://hellobubble.com/"
+    link:"https://bubbleskincare.com/products/slam-dunk-hydrating-moisturizer"
   },
   {
     goal:"Glow & tone", tag:"K-beauty exfoliant",
@@ -397,9 +398,18 @@ const PRODUCTS = [  {
     blurb:"An exfoliating toner to research carefully rather than automatically add to a routine. Avoid stacking multiple exfoliating products when starting out.",
     label:["SOME BY MI","MIRACLE TONER"], tone:["#e7eee2","#cdddc4"],
     bottle:["#b0c8a4","#fff","#9cb991"],
-    link:"https://somebymi.com/"
+    link:"https://somebymi.com/collections/toner"
   }
 ];
+const PRODUCT_IMAGES = {
+  "La Roche-Posay|Cicaplast Baume B5+": "https://m.media-amazon.com/images/I/51+uIqRz6-L._AC_SL1500_.jpg",
+  "Aestura|Atobarrier 365 Cream": "https://m.media-amazon.com/images/I/61d2DThS1vL._AC_SL1500_.jpg",
+  "COSRX|Advanced Snail 96 Mucin Essence": "https://m.media-amazon.com/images/I/51wXpY33oNL._AC_SL1500_.jpg",
+  "SKIN1004|Madagascar Centella Ampoule": "https://m.media-amazon.com/images/I/61G+i8A1kUL._AC_SL1500_.jpg",
+  "Anua|Heartleaf 77 Soothing Toner": "https://m.media-amazon.com/images/I/61H4P4d3LmL._AC_SL1500_.jpg",
+  "Torriden|DIVE-IN Hyaluronic Acid Serum": "https://m.media-amazon.com/images/I/61UaXjP1QBL._AC_SL1500_.jpg",
+  "The Ordinary|Niacinamide 10% + Zinc 1%": "https://m.media-amazon.com/images/I/61k8f-I4EGL._AC_SL1500_.jpg"
+};
 const GOALS=["All discoveries",...new Set(PRODUCTS.map(p=>p.goal))];
 let goal=GOALS[0];
 const $=s=>document.querySelector(s), esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
@@ -412,13 +422,14 @@ function render(){
   <article class="card">
     <div class="art" style="background:linear-gradient(150deg,${p.tone[0]},${p.tone[1]})">
       <span class="tag">${esc(p.tag)}</span>
-      <div class="bt" style="background:linear-gradient(100deg,${p.bottle[0]},${p.bottle[1]} 50%,${p.bottle[2]})"><span>${esc(p.label[0])}<small>${esc(p.label[1])}</small></span></div>
+      ${PRODUCT_IMAGES[p.brand+"|"+p.name] ? `<img class="product-photo" src="${esc(PRODUCT_IMAGES[p.brand+"|"+p.name])}" alt="${esc(p.brand+" "+p.name)} product photo" loading="lazy" onerror="this.remove()">` : ""}
+      <div class="bt" style="background:linear-gradient(100deg,${p.bottle[0]},${p.bottle[1]} 50%,${p.bottle[2]});${PRODUCT_IMAGES[p.brand+"|"+p.name] ? "display:none" : ""}"><span>${esc(p.label[0])}<small>${esc(p.label[1])}</small></span></div>
     </div>
 <div class="cbrand">${esc(p.brand)} · Editorial pick</div>
     <h3>${esc(p.name)}</h3>
     <p>${esc(p.blurb)}</p>
-    <div class="ill"><span>Direct retailer link</span></div>
-<a class="pill" href="${esc(p.link)}" target="_blank" rel="noopener noreferrer">Check product ↗</a>
+    <div class="ill"><span>Product-specific retailer page</span></div>
+<a class="pill" href="${esc(p.link)}" target="_blank" rel="noopener noreferrer">View product ↗</a>
   </article>`).join(""):`<div class="empty">No matches — try another search.</div>`;
 }
 $("#q").addEventListener("input",render);render();
