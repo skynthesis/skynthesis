@@ -118,7 +118,11 @@ dialog .pill{margin-top:12px}
 
 <header><div class="wrap nav">
   <a class="logo" href="#top">SKYN<b>THESIS</b></a>
-  <a class="pill" href="#shelf">Explore products ↗</a>
+  <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;justify-content:flex-end">
+    <a href="#shelf" style="font-size:.8rem;text-decoration:none">Products</a>
+    <a href="#guides" style="font-size:.8rem;text-decoration:none">Skin Notes</a>
+    <a class="pill" href="#shelf">Explore ↗</a>
+  </div>
 </div></header>
 
 <main id="top">
@@ -183,6 +187,35 @@ dialog .pill{margin-top:12px}
   <p>Cost per ml, product comparisons, and knowing when a splurge is justified.</p>
   <span>Read ↗</span>
 </a>
+    
+<a class="guide" href="#" data-open="kbeauty">
+  <div class="kick">The K-beauty edit</div>
+  <h3>K-Beauty, Without the Noise</h3>
+  <p>What Korean skincare does well, which products are worth researching and how to avoid a 10-step routine you do not need.</p>
+  <span>Explore the edit ↗</span>
+</a>
+
+<a class="guide" href="#" data-open="devices">
+  <div class="kick">The device edit</div>
+  <h3>Skincare Devices Worth Considering</h3>
+  <p>LED masks, at-home devices and hot-and-cold tools, assessed by purpose, evidence, cost and practicality.</p>
+  <span>Explore devices ↗</span>
+</a>
+
+<a class="guide" href="#" data-open="guasha">
+  <div class="kick">The trend file</div>
+  <h3>Gua Sha: Worth the Hype?</h3>
+  <p>Depuffing, facial massage and sculpting claims. What is plausible, what is temporary and what is not established.</p>
+  <span>Read the article ↗</span>
+</a>
+
+<a class="guide" href="#" data-open="advent2026">
+  <div class="kick">The seasonal edit</div>
+  <h3>Beauty Advent Calendars We Would Buy</h3>
+  <p>Our 2026 shortlist, with prices, standout contents and questions to ask before spending.</p>
+  <span>See the shortlist ↗</span>
+</a>
+
   </div>
 </div></section>
 
@@ -227,13 +260,150 @@ dialog .pill{margin-top:12px}
    goal: filter chip | brand: retailer/brand name | tag: small label on image
    label: text printed on bottle | tone: [light, dark] gradient | link: your tracked affiliate link
    When you have real approved products, replace these entries and set note/“illustrative” to "" */
-const PRODUCTS = [
-  {goal:"Barrier support",tag:"Barrier support",brand:"Concept Label",name:"Barrier Serum",blurb:"A concept serum for skin that needs calm, comfort and consistency.",label:["SKYN","SERUM"],tone:["#ece5f2","#d6c9e3"],bottle:["#e9e2ef","#fff","#cdbfdc"],link:"#"},
-  {goal:"Hydration",tag:"Daily hydration",brand:"Concept Label",name:"Everyday Cream",blurb:"A placeholder for a daily moisturiser discovery edit.",label:["SKYN","CREAM"],tone:["#eee3d8","#dfcdb9"],bottle:["#b8977a","#f3e5d4","#b8977a"],link:"#"},
-  {goal:"Glow & tone",tag:"Glow & tone",brand:"Object Beauty",name:"Evening Tone Essence",blurb:"A concept essence for an ingredient-conscious routine.",label:["SKYN","ESSENCE"],tone:["#e8ecdc","#d2dbc0"],bottle:["#a9b894","#f1f5e8","#a9b894"],link:"#"},
-  {goal:"Daily SPF",tag:"Daily SPF",brand:"Sun Theory",name:"Daily Veil SPF",blurb:"A placeholder for a daily sunscreen discovery edit.",label:["SKYN","SPF 50"],tone:["#f0e0e5","#dbbccb"],bottle:["#c7919f","#fdeff3","#c7919f"],link:"#"},
-  {goal:"Glow & tone",tag:"Glow & tone",brand:"Concept Label",name:"Bright Day Drops",blurb:"A concept antioxidant serum for dull-looking skin.",label:["SKYN","DROPS"],tone:["#f3ead2","#e3d2a3"],bottle:["#cdb06a","#fbf3da","#cdb06a"],link:"#"},
-  {goal:"Hydration",tag:"Daily hydration",brand:"Concept Label",name:"Water Mist",blurb:"A concept hydrating mist for a quick top-up.",label:["SKYN","MIST"],tone:["#dfe9ee","#bfd2dc"],bottle:["#8fb0c0","#eef6fa","#8fb0c0"],link:"#"}
+const PRODUCTS = [  {
+    goal:"Barrier support", tag:"Barrier support",
+    brand:"La Roche-Posay", name:"Cicaplast Baume B5+",
+    blurb:"A balm-style option for targeted areas of dryness and discomfort. Consider texture and how it fits your routine.",
+    label:["CICAPLAST","B5+"], tone:["#e8e3ef","#d3c8df"],
+    bottle:["#d8d1e2","#fff","#c8bfd5"],
+    link:"https://www.laroche-posay.co.uk/"
+  },
+  {
+    goal:"Barrier support", tag:"K-beauty favourite",
+    brand:"Aestura", name:"Atobarrier 365 Cream",
+    blurb:"A moisturiser to explore if you are interested in Korean barrier-care formulas. Check the current ingredient list and texture before buying.",
+    label:["AESTURA","365 CREAM"], tone:["#eee4d7","#d8c5b1"],
+    bottle:["#c7b6a1","#fffaf3","#b7a28c"],
+    link:"https://global.aestura.com/"
+  },
+  {
+    goal:"Glow & tone", tag:"Exfoliating liquid",
+    brand:"Paula's Choice", name:"Skin Perfecting 2% BHA Liquid",
+    blurb:"A leave-on salicylic acid exfoliant commonly used for clogged pores. Introduce gradually and avoid over-exfoliating.",
+    label:["PAULA'S","CHOICE"], tone:["#e9e4ef","#d4c7e2"],
+    bottle:["#b5a5cf","#fff","#a493bd"],
+    link:"https://www.paulaschoice.co.uk/"
+  },
+  {
+    goal:"Hydration", tag:"K-beauty favourite",
+    brand:"COSRX", name:"Advanced Snail 96 Mucin Essence",
+    blurb:"A lightweight essence popular with hydration-focused routines. Check the ingredient list if you have known sensitivities.",
+    label:["COSRX","SNAIL 96"], tone:["#e4ece7","#c6d8cf"],
+    bottle:["#a8c4b5","#fff","#91b09f"],
+    link:"https://cosrx.com/products/advanced-snail-96-mucin-power-essence"
+  },
+  {
+    goal:"Barrier support", tag:"Centella care",
+    brand:"SKIN1004", name:"Madagascar Centella Ampoule",
+    blurb:"A simple-feeling centella-focused serum to consider when comparing soothing skincare options.",
+    label:["SKIN1004","CENTELLA"], tone:["#e5eadc","#cbd9b9"],
+    bottle:["#a7b98e","#f8f9f2","#94a77b"],
+    link:"https://skin1004.com/products/madagascar-centella-ampoule"
+  },
+  {
+    goal:"Glow & tone", tag:"K-beauty favourite",
+    brand:"Anua", name:"Heartleaf 77 Soothing Toner",
+    blurb:"A watery toner associated with Korean skincare routines. Toners are optional, so consider whether it adds something useful to yours.",
+    label:["ANUA","HEARTLEAF"], tone:["#e7ece2","#cdd9c3"],
+    bottle:["#aab99e","#fff","#95a88a"],
+    link:"https://anua.us/"
+  },
+  {
+    goal:"Hydration", tag:"Hydration serum",
+    brand:"Torriden", name:"DIVE-IN Hyaluronic Acid Serum",
+    blurb:"A hydration-focused serum to compare with other humectant-rich options. A serum is not a substitute for moisturiser if your skin needs one.",
+    label:["TORRIDEN","DIVE-IN"], tone:["#dfeaf0","#bed5e2"],
+    bottle:["#90b7ca","#f7fcff","#7ea7bb"],
+    link:"https://torriden.com/"
+  },
+  {
+    goal:"Barrier support", tag:"Moisturiser",
+    brand:"Dr.G", name:"Red Blemish Clear Soothing Cream",
+    blurb:"A Korean moisturiser worth researching if you prefer lighter cream textures. Check the current formula and retailer listing.",
+    label:["Dr.G","RED BLEMISH"], tone:["#e7e8ef","#cbd0e2"],
+    bottle:["#b2b9d0","#fff","#9ca7c4"],
+    link:"https://dr-g.co.kr/"
+  },
+  {
+    goal:"Glow & tone", tag:"Niacinamide",
+    brand:"The Ordinary", name:"Niacinamide 10% + Zinc 1%",
+    blurb:"An accessible niacinamide serum to consider for routines focused on visible oiliness and uneven texture. A higher percentage is not automatically better for everyone.",
+    label:["THE ORDINARY","NIACINAMIDE"], tone:["#ece5f2","#d6c9e3"],
+    bottle:["#e9e2ef","#fff","#cdbfdc"],
+    link:"https://theordinary.com/en-gb/niacinamide-10-zinc-1-serum-100436.html"
+  },
+  {
+    goal:"Blemish care", tag:"Spot patches",
+    brand:"Hero Cosmetics", name:"Mighty Patch Original",
+    blurb:"Hydrocolloid patches can help protect some surface blemishes and absorb fluid. They are not a treatment for every type of acne.",
+    label:["HERO","MIGHTY PATCH"], tone:["#f0e5e8","#dfc5ce"],
+    bottle:["#d8b5c2","#fff8fa","#c59eae"],
+    link:"https://herocosmetics.us/"
+  },
+  {
+    goal:"Daily cleanse", tag:"Cleansing staple",
+    brand:"Bioderma", name:"Sensibio H2O Micellar Water",
+    blurb:"A micellar cleansing option often used to remove makeup and daily residue. Follow with a rinse or cleanser if that suits your skin and routine.",
+    label:["BIODERMA","SENSIBIO"], tone:["#f0e0e5","#dbbccb"],
+    bottle:["#d5a1b1","#fff","#c68d9e"],
+    link:"https://www.bioderma.co.uk/our-products/sensibio/h2o"
+  },
+  {
+    goal:"Blemish care", tag:"Benzoyl peroxide",
+    brand:"PanOxyl", name:"Acne Foaming Wash 4%",
+    blurb:"A benzoyl peroxide wash to research for acne-prone skin. Availability varies by country; check local product status and directions before buying.",
+    label:["PANOXYL","4% WASH"], tone:["#e8e7e1","#d0d0c7"],
+    bottle:["#f5f4ef","#fff","#d2d0c7"],
+    link:"https://panoxyl.com/acne-products/acne-foaming-wash-4-percent/"
+  },
+  {
+    goal:"Glow & tone", tag:"Azelaic acid",
+    brand:"Naturium", name:"Azelaic Topical Acid 10%",
+    blurb:"An option to investigate for uneven-looking tone and blemish-prone routines. Check the exact formula and current UK availability.",
+    label:["NATURIUM","AZELAIC 10%"], tone:["#e8e4db","#d3c8b4"],
+    bottle:["#d6c7ad","#fffaf2","#c2b294"],
+    link:"https://naturium.com/products/azelaic-topical-acid-10"
+  },
+  {
+    goal:"Barrier support", tag:"Sensitive-skin edit",
+    brand:"Tower 28 Beauty", name:"SOS Daily Rescue Facial Spray",
+    blurb:"A hypochlorous-acid spray to explore for a simple skincare routine. Check the retailer's current ingredients, directions and UK shipping.",
+    label:["TOWER 28","SOS SPRAY"], tone:["#e3e9ee","#c9d7e0"],
+    bottle:["#a8c1d0","#fff","#93b2c4"],
+    link:"https://www.tower28beauty.com/"
+  },
+  {
+    goal:"Hydration", tag:"Glass-skin edit",
+    brand:"Peach & Lily", name:"Glass Skin Refining Serum",
+    blurb:"A multi-ingredient serum marketed for a hydrated, luminous look. Compare the formula and price with products you already use.",
+    label:["PEACH & LILY","GLASS SKIN"], tone:["#eee3e7","#dfcbd7"],
+    bottle:["#d9b7c9","#fff8fb","#c69eb4"],
+    link:"https://www.peachandlily.com/products/glass-skin-refining-serum"
+  },
+  {
+    goal:"Daily cleanse", tag:"Gentle cleanse",
+    brand:"Dr. Sam's", name:"Flawless Cleanser",
+    blurb:"A cleanser to consider when comparing straightforward daily cleansing options. Check the current product details and price before purchasing.",
+    label:["DR SAM'S","CLEANSER"], tone:["#e9e5f0","#d4cbe3"],
+    bottle:["#b6a9cd","#fff","#a194bd"],
+    link:"https://drsambunting.com/"
+  },
+  {
+    goal:"Hydration", tag:"Everyday moisturiser",
+    brand:"Bubble Skincare", name:"Slam Dunk Hydrating Moisturiser",
+    blurb:"A daily moisturiser option to compare by texture, ingredients, pack size and cost per gram.",
+    label:["BUBBLE","SLAM DUNK"], tone:["#e6e8f2","#cbd3ed"],
+    bottle:["#b6c2ed","#fff","#a2b0df"],
+    link:"https://hellobubble.com/"
+  },
+  {
+    goal:"Glow & tone", tag:"K-beauty exfoliant",
+    brand:"Some By Mi", name:"AHA BHA PHA 30 Days Miracle Toner",
+    blurb:"An exfoliating toner to research carefully rather than automatically add to a routine. Avoid stacking multiple exfoliating products when starting out.",
+    label:["SOME BY MI","MIRACLE TONER"], tone:["#e7eee2","#cdddc4"],
+    bottle:["#b0c8a4","#fff","#9cb991"],
+    link:"https://somebymi.com/"
+  }
 ];
 const GOALS=["All discoveries",...new Set(PRODUCTS.map(p=>p.goal))];
 let goal=GOALS[0];
@@ -249,11 +419,11 @@ function render(){
       <span class="tag">${esc(p.tag)}</span>
       <div class="bt" style="background:linear-gradient(100deg,${p.bottle[0]},${p.bottle[1]} 50%,${p.bottle[2]})"><span>${esc(p.label[0])}<small>${esc(p.label[1])}</small></span></div>
     </div>
-    <div class="cbrand">${esc(p.brand)} · Concept label</div>
+<div class="cbrand">${esc(p.brand)} · Editorial pick</div>
     <h3>${esc(p.name)}</h3>
     <p>${esc(p.blurb)}</p>
-    <div class="ill"><span>Illustrative listing</span></div>
-    <a class="pill" href="${esc(p.link)}" target="_blank" rel="sponsored noopener">View discovery ↗</a>
+    <div class="ill"><span>Direct retailer link</span></div>
+<a class="pill" href="${esc(p.link)}" target="_blank" rel="noopener noreferrer">Check product ↗</a>
   </article>`).join(""):`<div class="empty">No matches — try another search.</div>`;
 }
 $("#q").addEventListener("input",render);render();
@@ -599,6 +769,154 @@ g3: [
   <p><strong>Our review policy:</strong> we record the source and nature of the evidence behind each assessment. Ingredient research, finished-product clinical studies and independent consumer testing are described separately. Published external ratings are averaged only when the scores are sufficiently comparable, with the number of sources shown. All SKYNTHESIS editorial scores and any Independent Review Average are presented as distinct measures.</p>
   `
 ],
+  
+kbeauty: [
+  "K-Beauty, Without the Noise",
+  `
+    <p><em>The SKYNTHESIS K-beauty edit · Thoughtful routines, not a 10-step checklist</em></p>
+
+    <p>Korean skincare is not one single routine or skin type. It includes everything from minimalist moisturisers and gentle cleansers to exfoliating toners, sheet masks and innovative textures. The useful question is not whether a product is Korean, but what it does, how its formula fits your needs and whether it is worth the price.</p>
+
+    <h3>What is worth exploring?</h3>
+    <ul>
+      <li><strong>Hydration:</strong> essences and serums with humectants can add hydration, but do not replace a moisturiser when your skin needs one.</li>
+      <li><strong>Barrier care:</strong> creams designed around moisturising ingredients can be useful when dryness or tightness is a concern.</li>
+      <li><strong>Sun protection:</strong> Korean sunscreens are popular for their textures. Check that the product is appropriate for your market and offers clearly stated broad-spectrum protection.</li>
+      <li><strong>Gentle routines:</strong> a cleanser, moisturiser and daytime sunscreen are a reasonable starting point. Extra steps are optional.</li>
+    </ul>
+
+    <h3>The brands on our radar</h3>
+    <p>These are brands we are interested in exploring, not a claim that every product from each brand is right for everyone.</p>
+    <ul>
+      <li><strong>Aestura:</strong> barrier-focused moisturisers.</li>
+      <li><strong>COSRX:</strong> essences, blemish-focused products and accessible skincare staples.</li>
+      <li><strong>SKIN1004:</strong> centella-focused skincare.</li>
+      <li><strong>Anua:</strong> toners and serums built around different ingredient themes.</li>
+      <li><strong>Torriden:</strong> hydration-focused products.</li>
+      <li><strong>Dr.G:</strong> moisturisers and soothing skincare.</li>
+      <li><strong>Some By Mi:</strong> exfoliating and blemish-focused ranges.</li>
+    </ul>
+
+    <h3>How to build a considered routine</h3>
+    <ol>
+      <li>Start with a cleanser that does not leave your skin feeling uncomfortably tight.</li>
+      <li>Choose one moisturiser that suits your skin and budget.</li>
+      <li>Use broad-spectrum sunscreen during the day.</li>
+      <li>If you want to add an essence or serum, choose one based on a specific goal and introduce it gradually.</li>
+    </ol>
+
+    <h3>Our K-beauty shopping checklist</h3>
+    <ul>
+      <li>Check the full ingredient list and the exact product version.</li>
+      <li>Confirm the seller, shipping costs, returns policy and product authenticity.</li>
+      <li>Compare the price per ml or gram, not just the packaging.</li>
+      <li>Do not buy multiple new actives at once.</li>
+      <li>Patch test where appropriate and stop using a product that causes a concerning reaction.</li>
+    </ul>
+
+    <p><strong>SKYNTHESIS says:</strong> K-beauty can be a useful source of product innovation, but a long routine is not automatically a better routine. Buy for your needs, not for the number of steps.</p>
+  `
+],
+
+devices: [
+  "Skincare Devices Worth Considering",
+  `
+    <p><em>The SKYNTHESIS device edit · Evidence, convenience and the real cost of a gadget</em></p>
+
+    <p>At-home skincare devices can be appealing, but they are not all designed to do the same thing. LED masks, microcurrent tools, facial massage devices and hot-and-cold tools have different purposes, evidence bases, prices and safety considerations. A device should complement a routine, not replace the basics.</p>
+
+    <h3>1. LED masks</h3>
+    <p>LED devices use particular wavelengths of light. Results depend on the device, its specifications, the treatment schedule and the outcome being measured. Research on one device should not be treated as proof that every LED mask performs equally well.</p>
+    <p><strong>Worth researching:</strong> <a href="https://www.therabody.co.uk/products/theraface-mask-glo-led-light-mask" target="_blank" rel="noopener noreferrer">TheraFace Mask Glo at Therabody UK ↗</a>.</p>
+    <p>Before buying, check the wavelength information, recommended treatment time, eye-safety instructions, contraindications, warranty and returns policy. If you have a medical condition or take medication that makes you sensitive to light, seek appropriate professional advice first.</p>
+
+    <h3>2. Hot-and-cold facial tools</h3>
+    <p>Cooling can temporarily reduce the appearance of puffiness for some people. Warming and massage may feel pleasant, but temporary changes in appearance should not be confused with permanent facial reshaping.</p>
+    <p><strong>Worth researching:</strong> <a href="https://www.sharkninja.co.uk/shark-depuffi-contrast-therapy-sculpting-tool-warm-black/FH220UKBK.html" target="_blank" rel="noopener noreferrer">Shark DePuffi Contrast Therapy Sculpting Tool ↗</a>.</p>
+    <p>The manufacturer's UK listing describes hot and cold settings and a gua sha-inspired shape. Check the live price and instructions before purchase. Use the temperature and pressure recommended by the manufacturer; do not apply extreme cold or heat to irritated or compromised skin.</p>
+
+    <h3>3. Multi-function facial devices</h3>
+    <p>Devices combining massage, microcurrent or other technologies need to be assessed by their specific functions. Do not assume that a device with more modes delivers better results. Check which claims have been tested on the exact device and whether its instructions suit your needs.</p>
+
+    <h3>Our device checklist</h3>
+    <ul>
+      <li>What specific concern is the device intended to address?</li>
+      <li>Is there published evidence on this exact device, or only on the general technology?</li>
+      <li>What is the treatment schedule, and will you realistically follow it?</li>
+      <li>Are there eye-safety instructions, contraindications or cleaning requirements?</li>
+      <li>What are the warranty, returns policy and replacement-part costs?</li>
+      <li>Would a simpler product or professional advice be more appropriate?</li>
+    </ul>
+
+    <p><strong>SKYNTHESIS says:</strong> treat a device as a considered purchase, not a shortcut. We will distinguish manufacturer claims from independent evidence and update prices and availability when we review this page.</p>
+  `
+],
+
+guasha: [
+  "Gua Sha: Worth the Hype?",
+  `
+    <p><em>The SKYNTHESIS trend file · Facial massage, depuffing and sculpting claims</em></p>
+
+    <p>Gua sha tools have become a familiar part of skincare routines, often promoted for depuffing, facial definition and lymphatic drainage. The experience can be relaxing, but the claims deserve to be separated rather than treated as one guaranteed result.</p>
+
+    <h3>What might it do?</h3>
+    <ul>
+      <li><strong>Temporary depuffing:</strong> gentle massage and cooling may temporarily change the appearance of puffiness. Results vary and are not permanent.</li>
+      <li><strong>Relaxation:</strong> some people enjoy facial massage as part of a calming routine.</li>
+      <li><strong>Product application:</strong> a tool can help spread a suitable product, although it is not necessary for skincare to work.</li>
+    </ul>
+
+    <h3>What about facial sculpting?</h3>
+    <p>There is not strong evidence that a gua sha stone permanently reshapes facial bones, removes facial fat or creates lasting structural changes. Claims about dramatic or permanent lifting should be treated cautiously. A temporary change in puffiness or the appearance of facial contours is not the same as permanent sculpting.</p>
+
+    <h3>Do you need an expensive tool?</h3>
+    <p>No. If you enjoy facial massage, a simple, smooth tool may be enough. Price, material, ease of cleaning and comfortable handling matter more than elaborate claims. A powered hot-and-cold device adds features, but that does not automatically make it more effective than a basic tool.</p>
+
+    <h3>How to use one more thoughtfully</h3>
+    <ul>
+      <li>Use gentle pressure and avoid dragging the tool over dry skin.</li>
+      <li>Use a suitable moisturiser or slip product if needed to reduce friction.</li>
+      <li>Clean the tool according to its material and manufacturer's instructions.</li>
+      <li>Avoid use over broken, irritated or actively inflamed skin, and stop if you experience pain or persistent redness.</li>
+      <li>Do not press hard around the eyes or over delicate areas.</li>
+    </ul>
+
+    <h3>What about the Shark DePuffi?</h3>
+    <p><a href="https://www.sharkninja.co.uk/shark-depuffi-contrast-therapy-sculpting-tool-warm-black/FH220UKBK.html" target="_blank" rel="noopener noreferrer">Shark DePuffi ↗</a> combines hot-and-cold settings with a gua sha-inspired shape. It may appeal to someone who values temperature options and a powered tool, but compare the price with a simple gua sha tool and consider whether you will use the extra features consistently.</p>
+
+    <p><strong>SKYNTHESIS verdict:</strong> gua sha may be worth trying for the ritual and a possible temporary depuffing effect. It is not an essential skincare step, and we would not buy one expecting permanent facial sculpting.</p>
+  `
+],
+
+advent2026: [
+  "The SKYNTHESIS 2026 Beauty Advent Calendar Edit",
+  `
+    <p><em>The seasonal shopping file · A shortlist, not a sponsored ranking</em></p>
+
+    <p>Beauty advent calendars can be an enjoyable way to discover products, but their advertised total value is not the same as value to you. Before buying, look at the products you will genuinely use, how many are full-size, whether there are repeats from previous years, and whether the calendar fits your budget.</p>
+
+    <h3>1. Cult Beauty Signature Edition</h3>
+    <p><strong>Listed price when checked: £245.</strong> Cult Beauty's 2026 Signature Edition is advertised with a selection of skincare, makeup and other beauty products. It is worth examining the full contents list to see how much of the calendar suits your routine.</p>
+    <p><a href="https://www.cultbeauty.co.uk/c/advent-calendar/" target="_blank" rel="noopener noreferrer">Check the current Cult Beauty calendar listings ↗</a></p>
+
+    <h3>2. Space NK Beauty Advent Calendar</h3>
+    <p><strong>Listed price when checked: £275.</strong> Space NK describes its 2026 calendar as containing 35 beauty products, including 26 full-size products. That can be appealing if you want a broad mix of premium skincare, makeup and haircare, but check the actual contents against your preferences.</p>
+    <p><a href="https://www.spacenk.com/uk/christmas-gifts/beauty-advent-calendars/beauty-advent-calendar-UK200063764.html" target="_blank" rel="noopener noreferrer">Check the Space NK 2026 calendar ↗</a></p>
+
+    <h3>How we would decide</h3>
+    <ul>
+      <li><strong>Contents:</strong> how many products would you realistically use?</li>
+      <li><strong>Full sizes:</strong> do the sizes justify the cost for your needs?</li>
+      <li><strong>Skin compatibility:</strong> are there ingredients or product types you already know do not suit you?</li>
+      <li><strong>Duplicates:</strong> do you already own many of the products?</li>
+      <li><strong>Budget:</strong> would buying two or three products you specifically want be better value?</li>
+      <li><strong>Availability:</strong> check delivery dates, stock, return terms and the retailer's latest contents list.</li>
+    </ul>
+
+    <p><strong>Our editorial note:</strong> this is a shortlist for further consideration, not a claim that we have personally purchased or tested every calendar. Prices and availability can change, so check the retailer before ordering. The value figures shown by retailers are their own stated valuations, not independently verified savings.</p>
+  `
+],
+
 };
 document.addEventListener("click",e=>{const t=e.target.closest("[data-open]");if(!t)return;e.preventDefault();const[h,b]=PAGES[t.dataset.open];$("#dc").innerHTML=`<h2>${h}</h2>${b}`;$("#d").showModal()});
 $("#yr").textContent=new Date().getFullYear();
