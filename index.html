@@ -114,7 +114,7 @@ dialog .pill{margin-top:12px}
 </style>
 </head>
 <body>
-<div class="disclose">Some links are affiliate links — we may earn a commission at no extra cost to you. <a href="#" data-open="disclosure">Read more</a></div>
+<div class="disclose">SKYNTHESIS may earn a commission from eligible purchases. Affiliate links will be clearly identified.</div>
 
 <header><div class="wrap nav">
   <a class="logo" href="#top">SKYN<b>THESIS</b></a>
@@ -159,13 +159,12 @@ dialog .pill{margin-top:12px}
   </div>
   <div class="chips" id="chips"></div>
   <div class="grid" id="grid"></div>
-  <p class="note">Listings above are illustrative placeholders. Swap them for real, approved affiliate products in the <code>PRODUCTS</code> list at the bottom of this file.</p>
 </div></section>
 
 <section class="dark" id="guides"><div class="wrap">
   <div class="kick">Skin Notes</div>
   <h2 class="big reveal">Less noise, <em>more knowing.</em></h2>
-  <p class="sub">Short, useful guides. Replace these with your own original writing — it's what brands and search engines want to see.</p>
+  <p class="sub">Ingredient explainers, thoughtful routines and practical guides to help you make informed skincare choices.</p>
   <div class="guides reveal">
     <a class="guide" href="#" data-open="g1">
   <div class="kick">Ingredient file</div>
@@ -234,7 +233,6 @@ dialog .pill{margin-top:12px}
     <div class="kick" style="color:#52465f">The letter</div>
     <h2>One considered note a week.</h2>
     <p>Ingredient explainers and new discoveries. No spam.</p>
-    <!-- Replace YOUR_FORM_ID with a free Formspree form ID (see guide) -->
     <form action="https://formspree.io/f/xqppzdbr" method="POST">
       <input type="email" name="email" placeholder="you@email.com" required aria-label="Email">
       <button class="pill solid" type="submit">Subscribe ↗</button>
@@ -256,10 +254,7 @@ dialog .pill{margin-top:12px}
 <dialog id="d"><div id="dc"></div><button class="pill solid" onclick="document.getElementById('d').close()">Close</button></dialog>
 
 <script>
-/* ============ EDIT YOUR PRODUCTS HERE ============
-   goal: filter chip | brand: retailer/brand name | tag: small label on image
-   label: text printed on bottle | tone: [light, dark] gradient | link: your tracked affiliate link
-   When you have real approved products, replace these entries and set note/“illustrative” to "" */
+
 const PRODUCTS = [  {
     goal:"Barrier support", tag:"Barrier support",
     brand:"La Roche-Posay", name:"Cicaplast Baume B5+",
@@ -494,7 +489,7 @@ const PAGES={
     <p>For privacy enquiries, contact <a href="mailto:hello.skynthesis@gmail.com">hello.skynthesis@gmail.com</a>.</p>
   `
 ],
- contact:["Contact","<p>Questions, brand enquiries or corrections? Email <strong>hello.skynthesis@gmail.com</strong> <em>(replace with your real address)</em>.</p>"],
+ contact:["Contact","<p>Questions, brand enquiries or corrections? Email <a href=\"mailto:hello.skynthesis@gmail.com\">hello.skynthesis@gmail.com</a>.</p>"],
  g1: [
   "Niacinamide vs Vitamin C: Which Is Worth Your Money?",
   `
