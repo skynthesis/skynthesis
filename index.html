@@ -1087,7 +1087,7 @@ $('#concernTrack').querySelectorAll('img').forEach(img=>img.addEventListener('er
 }
 function addBadges(){document.querySelectorAll('#grid .card').forEach(card=>{if(!card.querySelector('.approval-mark')){const brand=card.querySelector('.cbrand');if(brand)brand.insertAdjacentHTML('beforebegin',badge);}});document.querySelectorAll('.product-photo').forEach(img=>img.addEventListener('error',()=>imageFallback(img),{once:true}));}
 const grid=$('#grid');if(grid)new MutationObserver(addBadges).observe(grid,{childList:true});addBadges();
-const list=$('#concernList');if(list)list.addEventListener('click',()=>requestAnimationFrame(()=>{start=0;draw();}));
+const list=$('#concernList');if(list)list.addEventListener('click',()=>requestAnimationFrame(()=>{start=0;draw();if(selectedConcern)$('#concernCarousel').scrollIntoView({behavior:'smooth',block:'start'});}));
 $('#carouselPrev')?.addEventListener('click',()=>{if(chosen.length){start=(start+chosen.length-1)%chosen.length;draw();}});
 $('#carouselNext')?.addEventListener('click',()=>{if(chosen.length){start=(start+1)%chosen.length;draw();}});
 $('#clearConcern')?.addEventListener('click',()=>{$('#concernCarousel').hidden=true;});
