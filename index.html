@@ -68,6 +68,8 @@ h2.big{font-family:Newsreader,serif;font-weight:400;font-size:clamp(2.4rem,5vw,3
 .concern-term{border:1px solid var(--line);border-radius:99px;padding:9px 13px;background:var(--card);color:var(--ink);font:inherit;font-size:.78rem;cursor:pointer}
 .concern-term:hover,.concern-term.on{background:var(--ink);color:#fff;border-color:var(--ink)}
 .concern-result{font-size:.78rem;color:var(--muted);margin-top:13px}
+.concern-carousel{margin:28px 0 12px;padding:24px;background:var(--card);border:1px solid var(--line);border-radius:18px}
+.concern-carousel[hidden]{display:none}.carousel-head{display:flex;justify-content:space-between;align-items:flex-end;gap:18px;margin-bottom:20px;flex-wrap:wrap}.carousel-head h3{font:400 clamp(1.5rem,3vw,2.2rem)/1.1 Newsreader,serif;margin:8px 0}.approval-note{font-size:.75rem;color:var(--muted);max-width:600px}.carousel-controls{display:flex;align-items:center;gap:12px}.carousel-controls button{width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:var(--paper);font-size:20px;cursor:pointer}.concern-track{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.concern-product{background:var(--paper);border:1px solid var(--line);padding:12px;min-width:0}.concern-product .mini-art{height:180px;display:grid;place-items:center;position:relative;background:linear-gradient(145deg,#eee7f0,#dcd1e5);overflow:hidden}.concern-product .mini-art img{width:100%;height:100%;object-fit:contain;padding:12px;background:white}.concern-product h4{font:400 1.1rem/1.2 Newsreader,serif;margin:12px 0 6px}.concern-product p{font-size:.78rem;color:var(--muted);line-height:1.5;min-height:58px}.concern-product .mini-link{display:inline-block;margin-top:7px;font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;border-bottom:1px solid var(--ink);padding-bottom:4px;color:var(--ink);text-decoration:none}.approval-mark{display:flex;align-items:center;gap:7px;margin:13px 0 7px;color:#5e526c;font-size:.62rem;letter-spacing:.06em}.approval-icon{width:24px;height:24px;display:inline-flex;flex-shrink:0}.approval-icon svg{width:100%;height:100%}.approval-mark b{display:block;font-size:.62rem;letter-spacing:.08em}.approval-mark small{display:block;font-size:.58rem;letter-spacing:0;color:var(--muted);margin-top:2px}.image-fallback{padding:12px;text-align:center;color:#6b5c78;background:linear-gradient(145deg,#eee7f0,#dcd1e5);font:400 17px Newsreader,serif}.image-fallback small{display:block;font:10px Arial,sans-serif;margin-top:5px}@media(max-width:760px){.concern-track{grid-template-columns:1fr}.concern-product .mini-art{height:200px}.concern-product p{min-height:0}.concern-carousel{padding:14px}}
 .ai-mini{font-size:10px!important;line-height:1.5!important;color:var(--muted)!important;margin:8px 0!important}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:24px}
 .card{background:var(--card);border:1.5px solid var(--line);padding:24px;display:flex;flex-direction:column;transition:.3s}
@@ -217,7 +219,7 @@ dialog .pill{margin-top:12px}
   </div>
 </div></section>
 
-<section id="concernFinder" class="concern-section"><div class="wrap"><div class="concern-head"><div><div class="kick">Find by concern</div><h2>What would you like help with?</h2><p>Choose a concern or search for it below to see relevant products in the directory. These are starting points, not treatments or guarantees.</p></div><button type="button" class="concern-term" id="clearConcern">Show everything</button></div><div class="concern-list" id="concernList"></div><p class="concern-result" id="concernResult" aria-live="polite">Choose a concern to filter the directory.</p></div></section>
+<section id="concernFinder" class="concern-section"><div class="wrap"><div class="concern-head"><div><div class="kick">Find by concern</div><h2>What would you like help with?</h2><p>Choose a concern or search for it below to see relevant products in the directory. These are starting points, not treatments or guarantees.</p></div><button type="button" class="concern-term" id="clearConcern">Show everything</button></div><div class="concern-list" id="concernList"></div><p class="concern-result" id="concernResult" aria-live="polite">Choose a concern to see seven recommendations.</p><div class="concern-carousel" id="concernCarousel" hidden><div class="carousel-head"><div><span class="kick">Your SKYNTHESIS edit</span><h3 id="carouselTitle">Recommended for you</h3><p class="approval-note">Editorial approval means this product fits our discovery criteria; it is not a medical endorsement or a guarantee of results.</p></div><div class="carousel-controls"><button type="button" id="carouselPrev" aria-label="Previous products">←</button><span id="carouselCount">1 / 7</span><button type="button" id="carouselNext" aria-label="Next products">→</button></div></div><div class="concern-track" id="concernTrack"></div></div></div></section>
 <section id="shelf"><div class="wrap">
   <div class="kick">The discovery shelf</div>
   <h2 class="big reveal">Find your next favourite.</h2>
@@ -490,8 +492,8 @@ const PRODUCT_IMAGES = {
   "M&S|Beauty Advent Calendar": "https://asset1.cxnmarksandspencer.com/is/image/mands/hbp61228694_is",
   "Sephora|Favorites Advent Calendar": "https://www.sephora.co.uk/media/catalog/product/s/e/sephora_favorites_advent_calendar_2026.jpg",
   "Lookfantastic|Beauty Advent Calendar": "https://s1.thcdn.com/design-assets/products/17691363/lookfantastic-beauty-advent-calendar.jpg",
-  "Paula's Choice|Skin Perfecting 2% BHA Liquid": "https://m.media-amazon.com/images/I/61k8f-I4EGL._AC_SL1500_.jpg",
-  "Dr.G|Red Blemish Clear Soothing Cream": "https://m.media-amazon.com/images/I/61G+i8A1kUL._AC_SL1500_.jpg",
+  "Paula\'s Choice|Skin Perfecting 2% BHA Liquid": "https://www.makeupsens.com/30695/paula-s-choice-skin-perfecting-2-bha-liquid-exfoliant.jpg",
+  "Dr.G|Red Blemish Clear Soothing Cream": "https://oceanbuy.ca/cdn/shop/files/drg-drg-red-soothing-cream-70ml-oceanbuy-beauty-539878.jpg?v=1748331406&width=1080",
   "Hero Cosmetics|Mighty Patch Original": "https://m.media-amazon.com/images/I/61s-4v40oTL._AC_SL1500_.jpg",
   "Bioderma|Sensibio H2O Micellar Water": "https://m.media-amazon.com/images/I/61y4E4d1iGL._AC_SL1500_.jpg",
   "PanOxyl|Acne Foaming Wash 4%": "https://m.media-amazon.com/images/I/614gE-V4P2L._AC_SL1500_.jpg",
@@ -1050,6 +1052,48 @@ $("#down").addEventListener("click",()=>{
 });
 const io=new IntersectionObserver(es=>es.forEach(x=>x.isIntersecting&&x.target.classList.add("in")),{threshold:.12});
 document.querySelectorAll(".reveal").forEach(el=>io.observe(el));
+</script>
+<script>
+(function(){
+const badge='<div class="approval-mark"><span class="approval-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5 15 4l3.4.3.8 3.3 2.3 2.5-1.2 3.2.3 3.4-3.1 1.5-2.2 2.6-3.3-1-3.3 1-2.2-2.6-3.1-1.5.3-3.4-1.2-3.2 2.3-2.5.8-3.3L9 4z" fill="currentColor"/><path d="m7.8 12.2 2.6 2.6 5.8-5.9" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span><b>SKYNTHESIS APPROVED</b><small>Editorial selection · not medical endorsement</small></span></div>';
+const sets={
+"Dry skin":["CeraVe|Moisturising Cream","La Roche-Posay|Cicaplast Baume B5+","Aestura|Atobarrier 365 Cream","Dr.G|Red Blemish Clear Soothing Cream","COSRX|Advanced Snail 96 Mucin Essence","Torriden|DIVE-IN Hyaluronic Acid Serum","Bubble Skincare|Slam Dunk Hydrating Moisturiser"],
+"Dehydration & hydration":["COSRX|Advanced Snail 96 Mucin Essence","Torriden|DIVE-IN Hyaluronic Acid Serum","Bubble Skincare|Slam Dunk Hydrating Moisturiser","Peach & Lily|Glass Skin Refining Serum","Anua|Heartleaf 77 Soothing Toner","CeraVe|Moisturising Cream","Aestura|Atobarrier 365 Cream"],
+"Dark spots & hyperpigmentation":["The Ordinary|Niacinamide 10% + Zinc 1%","La Roche-Posay|Pure Vitamin C10 Serum","Geek & Gorgeous|C-Glow","Naturium|Azelaic Topical Acid 10%","SKIN1004|Hyalu-Cica Water-Fit Sun Serum","Peach & Lily|Glass Skin Refining Serum","Anua|Heartleaf 77 Soothing Toner"],
+"Redness & sensitivity":["SKIN1004|Madagascar Centella Ampoule","Anua|Heartleaf 77 Soothing Toner","La Roche-Posay|Cicaplast Baume B5+","Aestura|Atobarrier 365 Cream","Dr.G|Red Blemish Clear Soothing Cream","Tower 28 Beauty|SOS Daily Rescue Facial Spray","Bioderma|Sensibio H2O Micellar Water"],
+"Barrier support":["La Roche-Posay|Cicaplast Baume B5+","Aestura|Atobarrier 365 Cream","CeraVe|Moisturising Cream","SKIN1004|Madagascar Centella Ampoule","Dr.G|Red Blemish Clear Soothing Cream","Tower 28 Beauty|SOS Daily Rescue Facial Spray","COSRX|Advanced Snail 96 Mucin Essence"],
+"Blemishes & clogged pores":["Paula's Choice|Skin Perfecting 2% BHA Liquid","The Ordinary|Niacinamide 10% + Zinc 1%","Hero Cosmetics|Mighty Patch Original","PanOxyl|Acne Foaming Wash 4%","Some By Mi|AHA BHA PHA 30 Days Miracle Toner","Naturium|Azelaic Topical Acid 10%","Anua|Heartleaf 77 Soothing Toner"],
+"Oiliness & visible pores":["The Ordinary|Niacinamide 10% + Zinc 1%","Paula's Choice|Skin Perfecting 2% BHA Liquid","Anua|Heartleaf 77 Soothing Toner","PanOxyl|Acne Foaming Wash 4%","Naturium|Azelaic Topical Acid 10%","Some By Mi|AHA BHA PHA 30 Days Miracle Toner","Hero Cosmetics|Mighty Patch Original"],
+"Texture & roughness":["Paula's Choice|Skin Perfecting 2% BHA Liquid","The Ordinary|Niacinamide 10% + Zinc 1%","Some By Mi|AHA BHA PHA 30 Days Miracle Toner","Naturium|Azelaic Topical Acid 10%","La Roche-Posay|Pure Vitamin C10 Serum","Geek & Gorgeous|C-Glow","Peach & Lily|Glass Skin Refining Serum"],
+"Sun protection":["SKIN1004|Hyalu-Cica Water-Fit Sun Serum","La Roche-Posay|Pure Vitamin C10 Serum","Geek & Gorgeous|C-Glow","The Ordinary|Niacinamide 10% + Zinc 1%","CeraVe|Moisturising Cream","Aestura|Atobarrier 365 Cream","La Roche-Posay|Cicaplast Baume B5+"],
+"Puffiness":["TheraFace|Depuffing Wand","Shark|CryoGlow LED Face Mask","SKYNTHESIS edit|Rose Quartz Gua Sha Stone","CurrentBody|Skin LED Mask","Omnilux|Contour Face LED Mask","Aestura|Atobarrier 365 Cream","CeraVe|Moisturising Cream"],
+"Fine lines & firmness":["CurrentBody|Skin LED Mask","Omnilux|Contour Face LED Mask","Shark|CryoGlow LED Face Mask","La Roche-Posay|Pure Vitamin C10 Serum","Geek & Gorgeous|C-Glow","CeraVe|Moisturising Cream","Peach & Lily|Glass Skin Refining Serum"],
+"At-home devices":["Shark|CryoGlow LED Face Mask","TheraFace|Depuffing Wand","CurrentBody|Skin LED Mask","Omnilux|Contour Face LED Mask","SKYNTHESIS edit|Rose Quartz Gua Sha Stone","Lookfantastic|12 Days of K-Beauty","Sephora|Favorites Advent Calendar"],
+"Beauty gifts & advent calendars":["Lookfantastic|12 Days of K-Beauty","ASOS|Face + Body Advent Calendar","M&S|Beauty Advent Calendar","Sephora|Favorites Advent Calendar","Lookfantastic|Beauty Advent Calendar","Shark|CryoGlow LED Face Mask","SKYNTHESIS edit|Rose Quartz Gua Sha Stone"]
+};
+let chosen=[],start=0;
+const $=s=>document.querySelector(s);
+function imageFallback(img){img.onerror=null;img.style.display='none';const holder=img.parentElement;if(holder&&!holder.querySelector('.image-fallback'))holder.insertAdjacentHTML('beforeend','<div class="image-fallback">SKYNTHESIS<small>Product image unavailable</small></div>');}
+function draw(){
+const box=$('#concernCarousel');if(!box||!selectedConcern){if(box)box.hidden=true;return;}
+const keys=sets[selectedConcern.label]||selectedConcern.products||[];
+chosen=keys.map(k=>PRODUCTS.find(p=>p.brand+'|'+p.name===k)).filter(Boolean).slice(0,7);
+if(chosen.length<7)PRODUCTS.forEach(p=>{if(chosen.length<7&&!chosen.includes(p))chosen.push(p);});
+box.hidden=false;$('#carouselTitle').textContent=selectedConcern.label;
+const visible=Array.from({length:Math.min(3,chosen.length)},(_,i)=>chosen[(start+i)%chosen.length]);
+$('#carouselCount').textContent=(start+1)+'–'+Math.min(start+3,chosen.length)+' / '+chosen.length;
+$('#concernTrack').innerHTML=visible.map(p=>{const url=PRODUCT_IMAGES[p.brand+'|'+p.name]||'';return '<article class="concern-product"><div class="mini-art">'+(url?'<img src="'+esc(url)+'" alt="'+esc(p.brand+' '+p.name)+' product photo" loading="lazy">':'<div class="image-fallback">SKYNTHESIS<small>Product illustration</small></div>')+'</div>'+badge+'<div class="cbrand">'+esc(p.brand)+'</div><h4>'+esc(p.name)+'</h4><p>'+esc(p.blurb)+'</p><a class="mini-link" href="'+esc(p.link)+'" target="_blank" rel="'+(p.link.includes('link.amazon/')?'sponsored nofollow noopener noreferrer':'noopener noreferrer')+'">'+(p.link.includes('link.amazon/')?'Shop affiliate link ↗':'View product ↗')+'</a></article>';}).join('');
+$('#concernTrack').querySelectorAll('img').forEach(img=>img.addEventListener('error',()=>imageFallback(img),{once:true}));
+}
+function addBadges(){document.querySelectorAll('#grid .card').forEach(card=>{if(!card.querySelector('.approval-mark')){const brand=card.querySelector('.cbrand');if(brand)brand.insertAdjacentHTML('beforebegin',badge);}});document.querySelectorAll('.product-photo').forEach(img=>img.addEventListener('error',()=>imageFallback(img),{once:true}));}
+const grid=$('#grid');if(grid)new MutationObserver(addBadges).observe(grid,{childList:true});addBadges();
+const list=$('#concernList');if(list)list.addEventListener('click',()=>requestAnimationFrame(()=>{start=0;draw();}));
+$('#carouselPrev')?.addEventListener('click',()=>{if(chosen.length){start=(start+chosen.length-1)%chosen.length;draw();}});
+$('#carouselNext')?.addEventListener('click',()=>{if(chosen.length){start=(start+1)%chosen.length;draw();}});
+$('#clearConcern')?.addEventListener('click',()=>{$('#concernCarousel').hidden=true;});
+$('#q')?.addEventListener('input',()=>{if($('#q').value.trim())$('#concernCarousel').hidden=true;});
+document.addEventListener('error',e=>{if(e.target&&e.target.matches&&e.target.matches('.product-photo'))imageFallback(e.target);},true);
+})();
 </script>
 </body>
 </html>
