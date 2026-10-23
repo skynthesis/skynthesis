@@ -302,7 +302,7 @@ const PRODUCTS = [  {
     blurb:"A watery toner associated with Korean skincare routines. Toners are optional, so consider whether it adds something useful to yours.",
     label:["ANUA","HEARTLEAF"], tone:["#e7ece2","#cdd9c3"],
     bottle:["#aab99e","#fff","#95a88a"],
-    link:"https://www.sephora.co.uk/brands/anua"
+    link:"https://anuakorea.com/collections/shop-moisturizers/products/heartleaf-77-soothing-toner"
   },
   {
     goal:"Hydration", tag:"Hydration serum",
@@ -310,7 +310,7 @@ const PRODUCTS = [  {
     blurb:"A hydration-focused serum to compare with other humectant-rich options. A serum is not a substitute for moisturiser if your skin needs one.",
     label:["TORRIDEN","DIVE-IN"], tone:["#dfeaf0","#bed5e2"],
     bottle:["#90b7ca","#f7fcff","#7ea7bb"],
-    link:"https://torriden.us/collections/hyaluronic-acid-dive-in"
+    link:"https://torriden.us/products/dive-in-serum"
   },
   {
     goal:"Barrier support", tag:"Moisturiser",
@@ -318,7 +318,7 @@ const PRODUCTS = [  {
     blurb:"A Korean moisturiser worth researching if you prefer lighter cream textures. Check the current formula and retailer listing.",
     label:["Dr.G","RED BLEMISH"], tone:["#e7e8ef","#cbd0e2"],
     bottle:["#b2b9d0","#fff","#9ca7c4"],
-    link:"https://www.dr-g.com/collections/aclear/products/dr-g-red-blemish-clear-soothing-cream"
+    link:"https://songofskin.com/products/dr-g-red-blemish-clear-soothing-cream"
   },
   {
     goal:"Glow & tone", tag:"Niacinamide",
@@ -334,7 +334,7 @@ const PRODUCTS = [  {
     blurb:"Hydrocolloid patches can help protect some surface blemishes and absorb fluid. They are not a treatment for every type of acne.",
     label:["HERO","MIGHTY PATCH"], tone:["#f0e5e8","#dfc5ce"],
     bottle:["#d8b5c2","#fff8fa","#c59eae"],
-    link:"https://www.herocosmetics.co.uk/collections/all"
+    link:"https://www.boots.com/SearchDisplay?catalogId=28501%26isA2ZBrand=Y%26langId=-1%26manufacturer=Hero%26pageId=1603259%26storeId=11352%26urlRequestType=Base"
   },
   {
     goal:"Daily cleanse", tag:"Cleansing staple",
@@ -398,7 +398,7 @@ const PRODUCTS = [  {
     blurb:"An exfoliating toner to research carefully rather than automatically add to a routine. Avoid stacking multiple exfoliating products when starting out.",
     label:["SOME BY MI","MIRACLE TONER"], tone:["#e7eee2","#cdddc4"],
     bottle:["#b0c8a4","#fff","#9cb991"],
-    link:"https://somebymi.com/collections/toner"
+    link:"https://en.somebymi.com/product/aha-bha-pha-30-days-miracle-toner-150ml/73/"
   }
 ];
 const PRODUCT_IMAGES = {
@@ -422,7 +422,7 @@ function render(){
   <article class="card">
     <div class="art" style="background:linear-gradient(150deg,${p.tone[0]},${p.tone[1]})">
       <span class="tag">${esc(p.tag)}</span>
-      ${PRODUCT_IMAGES[p.brand+"|"+p.name] ? `<img class="product-photo" src="${esc(PRODUCT_IMAGES[p.brand+"|"+p.name])}" alt="${esc(p.brand+" "+p.name)} product photo" loading="lazy" onerror="this.remove()">` : ""}
+      ${PRODUCT_IMAGES[p.brand+"|"+p.name] ? `<img class="product-photo" src="${esc(PRODUCT_IMAGES[p.brand+"|"+p.name])}" alt="${esc(p.brand+" "+p.name)} product photo" loading="lazy" onerror="this.remove();this.nextElementSibling.style.display='grid'">` : ""}
       <div class="bt" style="background:linear-gradient(100deg,${p.bottle[0]},${p.bottle[1]} 50%,${p.bottle[2]});${PRODUCT_IMAGES[p.brand+"|"+p.name] ? "display:none" : ""}"><span>${esc(p.label[0])}<small>${esc(p.label[1])}</small></span></div>
     </div>
 <div class="cbrand">${esc(p.brand)} · Editorial pick</div>
