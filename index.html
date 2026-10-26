@@ -569,6 +569,7 @@ const PRODUCT_IMAGES = {
   "M&S|Beauty Advent Calendar": "https://asset1.cxnmarksandspencer.com/is/image/mands/hbp61228694_is",
   "Sephora|Favorites Advent Calendar": "https://www.sephora.co.uk/media/catalog/product/s/e/sephora_favorites_advent_calendar_2026.jpg",
   "Lookfantastic|Beauty Advent Calendar": "https://s1.thcdn.com/design-assets/products/17691363/lookfantastic-beauty-advent-calendar.jpg"
+  "Space NK|Beauty Advent Calendar": "https://www.spacenk.com/dw/image/v2/ABCE_PRD/on/demandware.static/-/Sites-spacenkmastercatalog/default/dwa32382e6/products/NK_MULTI/UK200063764_NK_MULTI.png?sw=582&sh=582",
 };
 window.SKYNTHESIS_PRODUCTS = PRODUCTS.map(p => ({...p, image: PRODUCT_IMAGES[p.brand+"|"+p.name] || ""}));
 const GOALS=["All discoveries",...new Set(PRODUCTS.map(p=>p.goal))];
