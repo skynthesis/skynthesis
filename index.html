@@ -614,7 +614,7 @@ function render(){
   <article class="card">
     <div class="art" style="background:linear-gradient(150deg,${p.tone[0]},${p.tone[1]})">
       <span class="tag">${esc(p.tag)}</span>
-      ${PRODUCT_IMAGES[p.brand+"|"+p.name] ? `<img class="product-photo" src="${esc(PRODUCT_IMAGES[p.brand+"|"+p.name])}" alt="${esc(p.brand+" "+p.name)} product photo" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.onerror=null;this.style.display='none';this.closest('.art').classList.add('image-missing');this.nextElementSibling.style.display='grid'">` : ""}
+      ${PRODUCT_IMAGES[p.brand+"|"+p.name] ? `<img class="product-photo" src="${esc(PRODUCT_IMAGES[p.brand+"|"+p.name])}" alt="${esc(p.brand+" "+p.name)} product photo" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.onerror=null;this.style.display='none';this.closest('.art').classList.add('image-missing');this.nextElementSibling.style.display='grid';this.nextElementSibling.setAttribute('aria-label','Image unavailable for '+this.alt)">` : ""}
       <div class="bt" style="background:linear-gradient(100deg,${p.bottle[0]},${p.bottle[1]} 50%,${p.bottle[2]});${PRODUCT_IMAGES[p.brand+"|"+p.name] ? "display:none" : ""}"><span>${esc(p.label[0])}<small>${esc(p.label[1])}</small></span></div>
     </div>
 <div class="cbrand">${esc(p.brand)} · Editorial pick</div>
