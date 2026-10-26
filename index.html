@@ -566,6 +566,7 @@ const PRODUCT_IMAGES = {
   "Sephora|Favorites Advent Calendar": "https://www.sephora.co.uk/media/catalog/product/s/e/sephora_favorites_advent_calendar_2026.jpg",
   "Lookfantastic|Beauty Advent Calendar": "https://s1.thcdn.com/design-assets/products/17691363/lookfantastic-beauty-advent-calendar.jpg"
 };
+window.SKYNTHESIS_PRODUCTS = PRODUCTS.map(p => ({...p, image: PRODUCT_IMAGES[p.brand+"|"+p.name] || ""}));
 const GOALS=["All discoveries",...new Set(PRODUCTS.map(p=>p.goal))];
 let goal=GOALS[0];
 const $=s=>document.querySelector(s), esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
@@ -1203,8 +1204,12 @@ document.addEventListener('error',e=>{if(e.target&&e.target.matches&&e.target.ma
 .concern-list{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0 10px}
 .concern-list .concern-term{margin:0}
 #shelf .controls{display:none}
+#shelf #chips{display:none!important}
 #shelf .chips{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0}
 #shelf .chips button{margin:0}
+#concernList .concern-term{margin:0}
+#concernList{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 10px}
+#shelf .integrated-concerns{margin-bottom:8px}
 #standaloneArticle{display:none;min-height:60vh;padding:56px 0}
 #standaloneArticle .article-inner{max-width:780px;margin:auto}
 #standaloneArticle .article-back{display:inline-block;margin-bottom:28px;color:var(--purple)}
@@ -1245,6 +1250,7 @@ document.addEventListener('error',e=>{if(e.target&&e.target.matches&&e.target.ma
  document.addEventListener('keydown',e=>{if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==='k'){e.preventDefault();openSearch();}if(e.key==='Escape')closeSearch();});
  function norm(s){return (s||'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();}
  function allProducts(){
+  if(Array.isArray(window.SKYNTHESIS_PRODUCTS))return window.SKYNTHESIS_PRODUCTS.map(p=>({name:p.name,brand:p.brand,desc:p.blurb||'',link:p.link||'#shelf',image:p.image||'',type:'Product',search:[p.brand,p.name,p.goal,p.tag,p.blurb,p.ingredients].filter(Boolean).join(' ')}));
   const found=[];
   document.querySelectorAll('#grid .card').forEach(card=>{
    const name=card.querySelector('h4')?.textContent||card.querySelector('h3')?.textContent||'';
@@ -1252,10 +1258,6 @@ document.addEventListener('error',e=>{if(e.target&&e.target.matches&&e.target.ma
    const link=card.querySelector('a.mini-link')?.href||card.querySelector('a[href*="amazon"],a[href^="http"]')?.href||'#shelf';
    const desc=card.querySelector('p')?.textContent||'';
    if(name)found.push({name,brand,desc,link,type:'Product',search:brand+' '+name+' '+desc});
-  });
-  document.querySelectorAll('#concernTrack .concern-product').forEach(card=>{
-   const name=card.querySelector('h4')?.textContent||'',brand=card.querySelector('.cbrand')?.textContent||'';
-   const link=card.querySelector('a')?.href||'#shelf';if(name&&!found.some(p=>p.name===name))found.push({name,brand,desc:card.querySelector('p')?.textContent||'',link,type:'Product',search:brand+' '+name});
   });
   return found;
  }
@@ -1277,8 +1279,7 @@ document.addEventListener('error',e=>{if(e.target&&e.target.matches&&e.target.ma
   const alt=Object.keys(ingredientAlternatives).find(k=>n.includes(k));
   if(alt&&!matches.some(x=>norm(x.name+' '+x.desc).includes(alt))){
    const a=ingredientAlternatives[alt];extraNote=a.note;
-   const cards=[...document.querySelectorAll('#grid .card')];
-   const alternatives=cards.filter(card=>a.terms.some(t=>norm(card.innerText).includes(norm(t)))).map(card=>({name:card.querySelector('h4')?.textContent||card.querySelector('h3')?.textContent||'',brand:card.querySelector('.cbrand')?.textContent||'',desc:card.querySelector('p')?.textContent||'',link:card.querySelector('a[href^="http"]')?.href||'#shelf',type:'Alternative',search:card.innerText}));
+   const alternatives=products.filter(p=>a.terms.some(t=>norm(p.search+' '+p.name+' '+p.brand+' '+p.desc).includes(norm(t)))).map(p=>({...p,type:'Alternative'}));
    matches.push(...alternatives.filter(x=>x.name&&!matches.some(m=>m.name===x.name)).slice(0,5));
   }
   if(!matches.length){
@@ -1307,15 +1308,19 @@ document.addEventListener('error',e=>{if(e.target&&e.target.matches&&e.target.ma
   const a=articleCopy[id];if(!a)return;
   document.querySelectorAll('main > section,main > .wrap,main > .collection-strip').forEach(el=>el.style.display='none');
   const view=$('#standaloneArticle');view.style.display='block';$('#standaloneTitle').textContent=a.title;$('#standaloneBody').innerHTML=a.body;
-  const cards=[...document.querySelectorAll('#grid .card')].filter(c=>a.terms.some(t=>norm(c.innerText).includes(norm(t)))).slice(0,5);
-  $('#standaloneProducts').innerHTML=cards.map(c=>'<div class="article-product"><span><b>'+c.querySelector('h4')?.textContent+'</b><br><small>'+c.querySelector('.cbrand')?.textContent+'</small></span><a href="'+(c.querySelector('a[href^="http"]')?.href||'#shelf')+'" target="_blank" rel="noopener">View product ↗</a></div>').join('')||'<p>Explore the discovery shelf for current products related to this topic.</p>';
+  const cards=allProducts().filter(p=>a.terms.some(t=>norm(p.search+' '+p.name+' '+p.brand+' '+p.desc).includes(norm(t)))).slice(0,5);
+  $('#standaloneProducts').innerHTML=cards.map(p=>'<div class="article-product"><span><b>'+p.name+'</b><br><small>'+p.brand+'</small></span><a href="'+p.link+'" target="_blank" rel="'+(/link\\.amazon\\/|linksynergy\\.com/i.test(p.link)?'sponsored nofollow noopener noreferrer':'noopener noreferrer')+'">View product ↗</a></div>').join('')||'<p>Explore the discovery shelf for current products related to this topic.</p>';
   location.hash='article-'+id;window.scrollTo({top:0,behavior:'instant'});
  }
  window.addEventListener('hashchange',()=>{const m=location.hash.match(/^#article-(.+)$/);if(m)showArticle(m[1]);else if($('#standaloneArticle').style.display==='block'){ $('#standaloneArticle').style.display='none';document.querySelectorAll('main > section,main > .wrap,main > .collection-strip').forEach(el=>el.style.display='');}});
- document.querySelectorAll('#guides .guide').forEach(a=>{const id=a.dataset.open;if(articleCopy[id])a.href='#article-'+id;});
+ articleCopy.malinGoetz=articleCopy.malin;
+ document.querySelectorAll('#guides .guide').forEach(a=>{const id=a.dataset.open;if(articleCopy[id]||id==='malinGoetz')a.href='#article-'+(id==='malinGoetz'?'malin':id);});
  const initial=location.hash.match(/^#article-(.+)$/);if(initial)showArticle(initial[1]);
  // Keep all concern buttons together; remove duplicates and visually separate from product chips.
- const concernWrap=$('#concernList');if(concernWrap){const names=new Set();concernWrap.querySelectorAll('button').forEach(b=>{const k=norm(b.textContent);if(names.has(k))b.remove();else names.add(k);});}
+ const concernWrap=$('#concernList');if(concernWrap){
+  const canonical={'dehydration hydration':'hydration','dehydrated skin':'hydration','hydration':'hydration','dark spots hyperpigmentation':'dark spots','hyperpigmentation':'dark spots','dark spots':'dark spots','blemishes clogged pores':'blemishes','clogged pores':'blemishes','blemishes':'blemishes','oiliness visible pores':'oiliness','visible pores':'oiliness','oiliness':'oiliness','texture roughness':'texture','rough texture':'texture','texture':'texture','fine lines firmness':'fine lines','firmness':'fine lines','fine lines':'fine lines','beauty gifts advent calendars':'beauty gifts','advent calendars':'beauty gifts','beauty gifts':'beauty gifts'};
+  const seen=new Set();concernWrap.querySelectorAll('button').forEach(b=>{const k=norm(b.textContent),group=canonical[k]||k;if(seen.has(group))b.remove();else seen.add(group);});
+ }
  // Make product search ingredient-aware and provide useful alternatives for common absent actives.
  const oldRender=window.render;
 })();
