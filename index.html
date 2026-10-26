@@ -37,7 +37,7 @@ header{position:sticky;top:0;z-index:30;background:rgba(248,246,242,.9);backdrop
 .hero h1 em{color:var(--purple);font-style:italic}
 .hero p{margin:34px 0 38px;max-width:620px;font-size:clamp(1.05rem,2vw,1.3rem);color:var(--muted);line-height:1.6}
 .hero .meta{margin-top:34px}
-.visual{margin:20px 0 0;position:relative;height:clamp(300px,48vw,580px);border-radius:28px;overflow:hidden;background:linear-gradient(135deg,#ebe4f1,#cdbfdd 60%,#b6a4cc)}
+.collection-strip{padding:26px 0 8px}.collection-inner{display:flex;align-items:center;gap:24px;flex-wrap:wrap;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding-top:22px;padding-bottom:22px}.collection-inner p{font:400 clamp(1.3rem,3vw,2rem)/1.1 Newsreader,Georgia,serif;flex:1}.collection-inner p em{color:var(--purple)}.collection-inner a{font-size:.78rem;text-transform:uppercase;letter-spacing:.12em;text-decoration:none;border-bottom:1px solid var(--purple);padding-bottom:4px}
 .disc{position:absolute;border-radius:50%;border:1.5px solid rgba(255,255,255,.7);background:linear-gradient(135deg,rgba(255,255,255,.25),rgba(255,255,255,.05))}
 .d1{width:46%;aspect-ratio:1;right:-6%;top:-18%}
 .d2{width:26%;aspect-ratio:1;left:-5%;bottom:-24%}
@@ -74,8 +74,8 @@ h2.big{font-family:Newsreader,serif;font-weight:400;font-size:clamp(2.4rem,5vw,3
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:24px}
 .card{background:var(--card);border:1.5px solid var(--line);padding:24px;display:flex;flex-direction:column;transition:.3s}
 .card:hover{transform:translateY(-6px);box-shadow:0 30px 50px -30px rgba(80,50,110,.35)}
-.art{aspect-ratio:1;position:relative;display:grid;place-items:center}
-.product-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;padding:18px;background:#fff;z-index:1}.tag{z-index:2}.bt{z-index:0}
+.art{aspect-ratio:1;position:relative;display:grid;place-items:center;overflow:hidden}
+.product-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;padding:18px;background:#fff;z-index:1}.tag{z-index:2}.bt{z-index:0}.image-missing .bt{display:grid!important}.integrated-concerns{margin-top:30px;margin-bottom:16px}.integrated-concerns p{color:var(--muted);font-size:.9rem;max-width:650px}
 .tag{position:absolute;top:18px;left:18px;background:#fff;padding:9px 14px;font-size:.7rem;letter-spacing:.18em;text-transform:uppercase}
 .bt{width:20%;height:42%;border-radius:20px;position:relative;box-shadow:0 30px 30px -14px rgba(0,0,0,.22);display:grid;place-items:center;margin-top:12%}
 .bt::before{content:"";position:absolute;top:-19%;left:20%;width:60%;height:20%;background:#a79fae;border-radius:3px 3px 0 0}
@@ -132,7 +132,7 @@ dialog .pill{margin-top:12px}
   <a class="logo" href="#top">SKYN<b>THESIS</b></a>
   <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;justify-content:flex-end">
     <a href="#guides" style="font-size:.8rem;text-decoration:none">Articles</a>
-    <a href="#concernFinder" style="font-size:.8rem;text-decoration:none">Skin concerns</a>
+    <a href="#shelf" style="font-size:.8rem;text-decoration:none">Find by concern</a>
     <a href="#shelf" style="font-size:.8rem;text-decoration:none">Directory</a>
     <a class="pill" href="#shelf">Explore ↗</a>
   </div>
@@ -147,20 +147,7 @@ dialog .pill{margin-top:12px}
   <div class="kick meta">Curated discoveries · Ingredient-aware · Always evolving</div>
 </div>
 
-<div class="wrap">
-  <div class="visual" aria-hidden="true">
-    <div class="disc d1"></div><div class="disc d2"></div>
-    <div class="hb"><span>SKYN<br>SYNTHESIS<small>SKIN STUDY Nº 01</small></span></div>
-    <div class="vtag">The Skin Edit / Vol. 001</div>
-  </div>
-</div>
-
-<div class="band" aria-hidden="true"><div>
-<span>Ingredient curious</span><i>✳</i><span>Routine intentional</span><i>✳</i><span>Beauty discovered</span><i>✳</i><span>Less noise, more knowing</span><i>✳</i>
-<span>Ingredient curious</span><i>✳</i><span>Routine intentional</span><i>✳</i><span>Beauty discovered</span><i>✳</i><span>Less noise, more knowing</span><i>✳</i>
-<span>Ingredient curious</span><i>✳</i><span>Routine intentional</span><i>✳</i><span>Beauty discovered</span><i>✳</i><span>Less noise, more knowing</span><i>✳</i>
-<span>Ingredient curious</span><i>✳</i><span>Routine intentional</span><i>✳</i><span>Beauty discovered</span><i>✳</i><span>Less noise, more knowing</span><i>✳</i>
-</div></div>
+<div class="collection-strip"><div class="wrap collection-inner"><span class="kick">The SKYNTHESIS approach</span><p>Good skincare is personal. <em>Find what fits yours.</em></p><a href="#shelf">Explore the shelf ↓</a></div></div>
 
 <section class="dark" id="guides"><div class="wrap">
   <div class="kick">Skin Notes</div>
@@ -220,11 +207,11 @@ dialog .pill{margin-top:12px}
   </div>
 </div></section>
 
-<section id="concernFinder" class="concern-section"><div class="wrap"><div class="concern-head"><div><div class="kick">Find by concern</div><h2>What would you like help with?</h2><p>Choose a concern or search for it below to see relevant products in the directory. These are starting points, not treatments or guarantees.</p></div><button type="button" class="concern-term" id="clearConcern">Show everything</button></div><div class="concern-list" id="concernList"></div><p class="concern-result" id="concernResult" aria-live="polite">Choose a concern to see seven recommendations.</p><div class="concern-carousel" id="concernCarousel" hidden><div class="carousel-head"><div><span class="kick">Your SKYNTHESIS edit</span><h3 id="carouselTitle">Recommended for you</h3><p class="approval-note">Editorial approval means this product fits our discovery criteria; it is not a medical endorsement or a guarantee of results.</p></div><div class="carousel-controls"><button type="button" id="carouselPrev" aria-label="Previous products">←</button><span id="carouselCount">1 / 7</span><button type="button" id="carouselNext" aria-label="Next products">→</button></div></div><div class="concern-track" id="concernTrack"></div></div></div></section>
 <section id="shelf"><div class="wrap">
   <div class="kick">The discovery shelf</div>
   <h2 class="big reveal">Find your next favourite.</h2>
-  <p class="sub reveal">Explore by skin goal, ingredient curiosity or the kind of routine you want to build.</p>
+  <p class="sub reveal">Start with what your skin needs, then explore the products selected for that concern. One shelf, one search, no separate recommendation feature.</p>
+  <div class="concern-head integrated-concerns"><div><div class="kick">Start with a concern</div><p>Choose a concern to filter the products below. These are discovery starting points, not treatments or guarantees.</p></div><button type="button" class="concern-term" id="clearConcern">Show everything</button></div><div class="concern-list" id="concernList"></div><p class="concern-result" id="concernResult" aria-live="polite">Browse all products or choose a concern.</p>
   <div class="controls">
     <input class="search" id="q" type="search" placeholder="Search products, ingredients or goals…" aria-label="Search">
     <span class="kick" id="count">Concept collection</span>
@@ -542,6 +529,9 @@ const PRODUCT_IMAGES = {
   "M&S|Beauty Advent Calendar": "https://asset1.cxnmarksandspencer.com/is/image/mands/hbp61228694_is",
   "Sephora|Favorites Advent Calendar": "https://www.sephora.co.uk/media/catalog/product/s/e/sephora_favorites_advent_calendar_2026.jpg",
   "Lookfantastic|Beauty Advent Calendar": "https://s1.thcdn.com/design-assets/products/17691363/lookfantastic-beauty-advent-calendar.jpg",
+  "The Ordinary|Niacinamide 10% + Zinc 1%": "https://theordinary.com/dw/image/v2/BCZJ_PRD/on/demandware.static/-/Sites-deciem-master/default/dw2e8a5a8d/Products/ORD/rdn-niacinamide-10pct-zinc-1pct-30ml.png",
+  "La Roche-Posay|Pure Vitamin C10 Serum": "https://www.laroche-posay.co.uk/dw/image/v2/AAQP_PRD/on/demandware.static/-/Sites-lrp-master-catalog/default/dw9a1a9f8f/product/3337875660570/3337875660570.jpg",
+  "Dr.G|Red Blemish Clear Soothing Cream": "https://oceanbuy.ca/cdn/shop/files/drg-drg-red-soothing-cream-70ml-oceanbuy-beauty-539878.jpg?v=1748331406&width=1080",
   "Paula\'s Choice|Skin Perfecting 2% BHA Liquid": "https://media.paulaschoice-eu.com/image/upload/f_auto%2Cq_auto%2Cdpr_auto/products/images/redesign/2010-moon-1?_i=AG",
   "Dr.G|Red Blemish Clear Soothing Cream": "https://oceanbuy.ca/cdn/shop/files/drg-drg-red-soothing-cream-70ml-oceanbuy-beauty-539878.jpg?v=1748331406&width=1080",
   "Hero Cosmetics|Mighty Patch Original": "https://m.media-amazon.com/images/I/61s-4v40oTL._AC_SL1500_.jpg",
@@ -579,21 +569,25 @@ const CONCERN_MAP=[
 let selectedConcern=null;
 const concernList=$("#concernList");
 concernList.innerHTML=CONCERN_MAP.map((c,i)=>'<button type="button" class="concern-term" data-concern="'+i+'">'+esc(c.label)+'</button>').join("");
-function chooseConcern(index){selectedConcern=index===null?null:CONCERN_MAP[index];goal=GOALS[0];$("#q").value="";document.querySelectorAll(".chip").forEach(b=>b.classList.toggle("on",b.dataset.g===goal));concernList.querySelectorAll("button").forEach(b=>b.classList.toggle("on",Number(b.dataset.concern)===index));$("#concernResult").textContent=selectedConcern?"Showing products for "+selectedConcern.label+".":"Showing all products.";render();if(selectedConcern)$("#shelf").scrollIntoView({behavior:"smooth",block:"start"});}
+function chooseConcern(index){selectedConcern=index===null?null:CONCERN_MAP[index];goal=GOALS[0];$("#q").value="";document.querySelectorAll(".chip").forEach(b=>b.classList.toggle("on",b.dataset.g===goal));concernList.querySelectorAll("button").forEach(b=>b.classList.toggle("on",Number(b.dataset.concern)===index));$("#concernResult").textContent=selectedConcern?"Showing products for "+selectedConcern.label+".":"Showing all products.";render();}
 concernList.addEventListener("click",e=>{const b=e.target.closest("button[data-concern]");if(b)chooseConcern(Number(b.dataset.concern));});
 $("#clearConcern").addEventListener("click",()=>chooseConcern(null));
 
 function render(){
   const q=$("#q").value.trim().toLowerCase();
   const queryConcern=selectedConcern||CONCERN_MAP.find(c=>c.terms.some(term=>q&&(term.includes(q)||q.includes(term))));
-  const allowed=queryConcern?queryConcern.products:null;
+  const allowed=queryConcern?queryConcern.products.map(x=>x.toLowerCase().replace(/[^a-z0-9]+/g," ").trim()):null;
   const searchQ=queryConcern&&q&&queryConcern.terms.some(term=>term.includes(q)||q.includes(term))?"":q;
-  const list=PRODUCTS.filter(p=>(goal===GOALS[0]||p.goal===goal)&&(!allowed||allowed.includes(p.brand+"|"+p.name))&&`${p.name} ${p.brand} ${p.goal} ${p.blurb}`.toLowerCase().includes(searchQ));
+  const list=PRODUCTS.filter(p=>{
+    const key=(p.brand+" "+p.name).toLowerCase().replace(/[^a-z0-9]+/g," ").trim();
+    const concernMatch=!allowed||allowed.some(x=>{const wanted=x.replace(/[^a-z0-9]+/g," ").trim();return key===wanted||key.includes(wanted)||wanted.includes(key);})||(!!queryConcern&&queryConcern.terms.some(term=>(p.name+" "+p.brand+" "+p.goal+" "+p.blurb).toLowerCase().includes(term.toLowerCase())));
+    return (goal===GOALS[0]||p.goal===goal)&&concernMatch&&`${p.name} ${p.brand} ${p.goal} ${p.blurb}`.toLowerCase().includes(searchQ);
+  });
   $("#grid").innerHTML=list.length?list.map(p=>`
   <article class="card">
     <div class="art" style="background:linear-gradient(150deg,${p.tone[0]},${p.tone[1]})">
       <span class="tag">${esc(p.tag)}</span>
-      ${PRODUCT_IMAGES[p.brand+"|"+p.name] ? `<img class="product-photo" src="${esc(PRODUCT_IMAGES[p.brand+"|"+p.name])}" alt="${esc(p.brand+" "+p.name)} product photo" loading="lazy" onerror="this.remove();this.nextElementSibling.style.display='grid'">` : ""}
+      ${PRODUCT_IMAGES[p.brand+"|"+p.name] ? `<img class="product-photo" src="${esc(PRODUCT_IMAGES[p.brand+"|"+p.name])}" alt="${esc(p.brand+" "+p.name)} product photo" loading="lazy" onerror="this.remove();this.nextElementSibling.style.display='grid';this.closest('.art').classList.add('image-missing')">` : ""}
       <div class="bt" style="background:linear-gradient(100deg,${p.bottle[0]},${p.bottle[1]} 50%,${p.bottle[2]});${PRODUCT_IMAGES[p.brand+"|"+p.name] ? "display:none" : ""}"><span>${esc(p.label[0])}<small>${esc(p.label[1])}</small></span></div>
     </div>
 <div class="cbrand">${esc(p.brand)} · Editorial pick</div>
