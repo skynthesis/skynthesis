@@ -1184,5 +1184,142 @@ $('#q')?.addEventListener('input',()=>{if($('#q').value.trim())$('#concernCarous
 document.addEventListener('error',e=>{if(e.target&&e.target.matches&&e.target.matches('.product-photo'))imageFallback(e.target);},true);
 })();
 </script>
+
+<style>
+/* Unified global search and tidy discovery controls */
+.global-search-trigger{border:1px solid var(--line);background:transparent;color:var(--ink);border-radius:999px;width:40px;height:40px;display:inline-grid;place-items:center;cursor:pointer}
+.global-search-trigger svg{width:18px;height:18px}
+#globalSearchPanel{position:fixed;inset:0;z-index:1000;background:rgba(37,32,46,.45);padding:8vh 18px 24px;display:none}
+#globalSearchPanel.open{display:block}
+.global-search-box{max-width:760px;margin:0 auto;background:var(--cream,#f8f6f2);border:1px solid var(--line);border-radius:20px;padding:22px;box-shadow:0 20px 80px #20182b30}
+.global-search-top{display:flex;gap:12px;align-items:center}
+.global-search-input{width:100%;padding:16px 18px;border:1px solid var(--line);border-radius:999px;background:#fffefc;font:inherit;font-size:1rem;color:var(--ink)}
+.global-search-close{border:1px solid var(--line);background:transparent;border-radius:50%;width:42px;height:42px;cursor:pointer}
+.global-results{max-height:60vh;overflow:auto;margin-top:14px}
+.global-result{display:block;padding:14px 8px;border-bottom:1px solid var(--line);text-decoration:none;color:var(--ink)}
+.global-result strong{display:block;font:500 1.2rem Newsreader,Georgia,serif}
+.global-result small{color:var(--muted)}
+.global-empty{padding:20px 8px;color:var(--muted);line-height:1.6}
+.concern-list{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0 10px}
+.concern-list .concern-term{margin:0}
+#shelf .controls{display:none}
+#shelf .chips{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0}
+#shelf .chips button{margin:0}
+#standaloneArticle{display:none;min-height:60vh;padding:56px 0}
+#standaloneArticle .article-inner{max-width:780px;margin:auto}
+#standaloneArticle .article-back{display:inline-block;margin-bottom:28px;color:var(--purple)}
+#standaloneArticle h1{font:400 clamp(2.5rem,7vw,5rem)/.98 Newsreader,Georgia,serif;letter-spacing:-.04em}
+#standaloneArticle p{font-size:1.05rem;line-height:1.8;color:var(--muted)}
+#standaloneArticle .article-product{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:16px 0;border-bottom:1px solid var(--line)}
+@media(max-width:600px){.global-search-box{padding:14px}.global-search-top{gap:7px}}
+</style>
+<div id="globalSearchPanel" role="dialog" aria-modal="true" aria-label="Search SKYNTHESIS">
+ <div class="global-search-box"><div class="global-search-top">
+  <input id="globalSearchInput" class="global-search-input" type="search" placeholder="Search products, ingredients, concerns or articles…" autocomplete="off">
+  <button id="globalSearchClose" class="global-search-close" aria-label="Close search">✕</button>
+ </div><div id="globalSearchResults" class="global-results"><p class="global-empty">Search the whole site, from ingredient explainers to individual products.</p></div></div>
+</div>
+<section id="standaloneArticle"><div class="wrap article-inner"><a href="#guides" class="article-back">← All Skin Notes</a><div class="kick">SKYNTHESIS · Skin Notes</div><h1 id="standaloneTitle"></h1><div id="standaloneBody"></div><h2>Products mentioned</h2><div id="standaloneProducts"></div><a class="pill solid" href="#shelf">Explore the discovery shelf ↗</a></div></section>
+<script>
+(function(){
+ const $=s=>document.querySelector(s);
+ const PRODUCTS=Array.isArray(window.SKYNTHESIS_PRODUCTS)?window.SKYNTHESIS_PRODUCTS:[];
+ const concernNames=[...document.querySelectorAll('#concernList button')].map(b=>b.textContent.trim());
+ // Collapse duplicate/near-duplicate concern labels in one continuous button group.
+ const seen=new Set();
+ document.querySelectorAll('#concernList button').forEach(b=>{
+   const key=b.textContent.toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();
+   if(seen.has(key))b.remove();else seen.add(key);
+ });
+ // Move global search into the header as a single search icon.
+ const header=document.querySelector('header .nav > div');
+ if(header&&!document.querySelector('.global-search-trigger')){
+  const btn=document.createElement('button');btn.className='global-search-trigger';btn.type='button';btn.setAttribute('aria-label','Search the whole site');btn.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="10.8" cy="10.8" r="6.8"></circle><path d="m16 16 4.5 4.5"></path></svg>';
+  header.prepend(btn);btn.addEventListener('click',openSearch);
+ }
+ const panel=$('#globalSearchPanel'),input=$('#globalSearchInput'),results=$('#globalSearchResults');
+ function openSearch(){panel.classList.add('open');input.focus();runSearch();}
+ function closeSearch(){panel.classList.remove('open');}
+ $('#globalSearchClose').addEventListener('click',closeSearch);
+ panel.addEventListener('click',e=>{if(e.target===panel)closeSearch();});
+ document.addEventListener('keydown',e=>{if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==='k'){e.preventDefault();openSearch();}if(e.key==='Escape')closeSearch();});
+ function norm(s){return (s||'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();}
+ function allProducts(){
+  const found=[];
+  document.querySelectorAll('#grid .card').forEach(card=>{
+   const name=card.querySelector('h4')?.textContent||card.querySelector('h3')?.textContent||'';
+   const brand=card.querySelector('.cbrand')?.textContent||'';
+   const link=card.querySelector('a.mini-link')?.href||card.querySelector('a[href*="amazon"],a[href^="http"]')?.href||'#shelf';
+   const desc=card.querySelector('p')?.textContent||'';
+   if(name)found.push({name,brand,desc,link,type:'Product',search:brand+' '+name+' '+desc});
+  });
+  document.querySelectorAll('#concernTrack .concern-product').forEach(card=>{
+   const name=card.querySelector('h4')?.textContent||'',brand=card.querySelector('.cbrand')?.textContent||'';
+   const link=card.querySelector('a')?.href||'#shelf';if(name&&!found.some(p=>p.name===name))found.push({name,brand,desc:card.querySelector('p')?.textContent||'',link,type:'Product',search:brand+' '+name});
+  });
+  return found;
+ }
+ function articleItems(){
+  return [...document.querySelectorAll('#guides .guide')].map(a=>({name:a.querySelector('h3')?.textContent||'Skin Notes',brand:a.querySelector('.kick')?.textContent||'Article',desc:a.querySelector('p')?.textContent||'',link:'#'+(a.dataset.open?'article-'+a.dataset.open:'guides'),type:'Article',search:a.innerText}));
+ }
+ function runSearch(){
+  const q=input.value.trim(),n=norm(q);if(!n){results.innerHTML='<p class="global-empty">Search products, ingredients, skin concerns and articles. Try “alpha arbutin”, “barrier repair” or “vitamin C”.</p>';return;}
+  const products=allProducts(),articles=articleItems();
+  let matches=[...articles,...products].filter(x=>norm(x.search+' '+x.name+' '+x.brand+' '+x.desc).includes(n)||n.split(' ').every(t=>norm(x.search+' '+x.name+' '+x.brand+' '+x.desc).includes(t)));
+  // Ingredient searches offer a transparent adjacent option if the exact ingredient is not currently catalogued.
+  const ingredientAlternatives={
+   'alpha arbutin':{terms:['dark spots','hyperpigmentation','uneven tone','glow'],note:'No product currently listed with alpha arbutin. Here are alternative ingredients to explore for uneven tone; they are not ingredient-equivalent.'},
+   'arbutin':{terms:['dark spots','hyperpigmentation','uneven tone','glow'],note:'No exact arbutin match found. These are alternative tone-support options, not arbutin products.'},
+   'azelaic acid':{terms:['dark spots','hyperpigmentation','redness','blemishes'],note:'No exact azelaic acid match found. Explore these adjacent options and check each ingredient list.'},
+   'retinal':{terms:['fine lines','texture','retinol'],note:'No exact retinal match found. These are related texture-focused options, not retinal equivalents.'}
+  };
+  let extraNote='';
+  const alt=Object.keys(ingredientAlternatives).find(k=>n.includes(k));
+  if(alt&&!matches.some(x=>norm(x.name+' '+x.desc).includes(alt))){
+   const a=ingredientAlternatives[alt];extraNote=a.note;
+   const cards=[...document.querySelectorAll('#grid .card')];
+   const alternatives=cards.filter(card=>a.terms.some(t=>norm(card.innerText).includes(norm(t)))).map(card=>({name:card.querySelector('h4')?.textContent||card.querySelector('h3')?.textContent||'',brand:card.querySelector('.cbrand')?.textContent||'',desc:card.querySelector('p')?.textContent||'',link:card.querySelector('a[href^="http"]')?.href||'#shelf',type:'Alternative',search:card.innerText}));
+   matches.push(...alternatives.filter(x=>x.name&&!matches.some(m=>m.name===x.name)).slice(0,5));
+  }
+  if(!matches.length){
+   // Query terms can match concern labels even when product titles do not contain the exact ingredient.
+   const concerns=[...document.querySelectorAll('#concernList button')].filter(b=>norm(b.textContent).includes(n)||n.split(' ').some(t=>norm(b.textContent).includes(t)));
+   matches=concerns.map(b=>({name:'Explore '+b.textContent,brand:'Skin concern',desc:'Open the discovery shelf filtered for this concern.',link:'#shelf',type:'Concern',search:b.textContent}));
+  }
+  results.innerHTML=(extraNote?'<p class="global-empty">'+extraNote+'</p>':'')+(matches.length?matches.slice(0,16).map(x=>'<a class="global-result" href="'+x.link.replace(/"/g,'&quot;')+'" data-search-result><small>'+x.type+(x.brand?' · '+x.brand:'')+'</small><strong>'+x.name+'</strong><span>'+x.desc+'</span></a>').join(''):'<p class="global-empty">No exact match yet. Try a broader ingredient, product name, concern or article topic.</p>');
+  results.querySelectorAll('[data-search-result]').forEach(a=>a.addEventListener('click',e=>{
+   const href=a.getAttribute('href');if(href&&href.startsWith('#article-')){e.preventDefault();showArticle(href.slice(9));closeSearch();}else if(href==='#shelf'){closeSearch();const term=a.querySelector('strong')?.textContent||'';if(term.startsWith('Explore ')){const target=norm(term.replace(/^Explore /,''));const b=[...document.querySelectorAll('#concernList button')].find(x=>norm(x.textContent)===target);if(b)b.click();}else{location.hash='shelf';}}else closeSearch();
+  }));
+ }
+ input.addEventListener('input',runSearch);
+ // Existing modal articles become standalone, linkable pages while keeping the homepage index.
+ const articleCopy={
+  g1:{title:'Niacinamide vs Vitamin C',body:'<p>Niacinamide and vitamin C are different ingredients with overlapping cosmetic goals. Niacinamide is commonly used to support the skin barrier and improve the appearance of uneven tone; vitamin C is an antioxidant used in routines focused on radiance and the appearance of dark marks.</p><p>Choose based on your skin tolerance, formulation and budget rather than assuming one is universally better. Introduce one new active at a time and use daily broad-spectrum sunscreen when working on uneven tone.</p>',terms:['niacinamide','vitamin c','uneven tone','dark spots']},
+  g2:{title:'Barrier Repair, Decoded',body:'<p>A barrier-focused routine is usually built around a gentle cleanser, a moisturiser suited to your skin and daytime sunscreen. Ceramides and other moisturising ingredients can help support comfort, but no single ingredient guarantees repair.</p><p>Keep the routine simple when skin feels irritated. Patch test new products and seek professional advice for persistent eczema-like symptoms or reactions.</p>',terms:['barrier','ceramide','moisturiser','dry skin']},
+  g3:{title:'The Price of a Drop',body:'<p>Compare cost per millilitre, the amount you need to use and whether the product fills a real gap in your routine. A higher price is not proof of better results, and an inexpensive product you use consistently may be the better value.</p>',terms:['value','price','budget','cost']},
+  kbeauty:{title:'K-Beauty, Without the Noise',body:'<p>Korean skincare covers a wide range of formulas, from hydrating essences to barrier creams and sunscreens. You do not need a ten-step routine: choose products that suit your priorities, check the ingredient list and add one new product at a time.</p>',terms:['k beauty','korean','hydration','barrier']},
+  devices:{title:'Devices Worth Considering',body:'<p>At-home devices vary in evidence, cost and practical requirements. Read manufacturer guidance, check contraindications and avoid treating a device as a substitute for medical assessment. For LED products, wavelength, dose, safety information and consistent use all matter.</p>',terms:['device','led','mask','gua sha']},
+  guasha:{title:'Gua Sha: What It Can and Cannot Do',body:'<p>Gua sha may temporarily change the appearance of puffiness through massage, but claims about permanently sculpting the face or changing facial fat are not well supported. Use gentle pressure and avoid irritated or broken skin.</p>',terms:['gua sha','puffiness','massage']},
+  malin:{title:'Malin + Goetz: Brand Edit',body:'<p>Assess each formula on its own ingredients, intended use, price and your skin’s tolerance. A brand-wide aesthetic or reputation cannot tell you whether every product will suit your routine.</p>',terms:['malin','moisturiser','niacinamide','sunscreen']},
+  advent2026:{title:'Beauty Advent Calendars We Would Buy',body:'<p>Before buying a beauty calendar, check the exact contents, sizes, expiry dates and how much of the box you would realistically use. Advertised combined value is less meaningful if most products do not fit your needs.</p>',terms:['advent','calendar','beauty gifts']}
+ };
+ function showArticle(id){
+  const a=articleCopy[id];if(!a)return;
+  document.querySelectorAll('main > section,main > .wrap,main > .collection-strip').forEach(el=>el.style.display='none');
+  const view=$('#standaloneArticle');view.style.display='block';$('#standaloneTitle').textContent=a.title;$('#standaloneBody').innerHTML=a.body;
+  const cards=[...document.querySelectorAll('#grid .card')].filter(c=>a.terms.some(t=>norm(c.innerText).includes(norm(t)))).slice(0,5);
+  $('#standaloneProducts').innerHTML=cards.map(c=>'<div class="article-product"><span><b>'+c.querySelector('h4')?.textContent+'</b><br><small>'+c.querySelector('.cbrand')?.textContent+'</small></span><a href="'+(c.querySelector('a[href^="http"]')?.href||'#shelf')+'" target="_blank" rel="noopener">View product ↗</a></div>').join('')||'<p>Explore the discovery shelf for current products related to this topic.</p>';
+  location.hash='article-'+id;window.scrollTo({top:0,behavior:'instant'});
+ }
+ window.addEventListener('hashchange',()=>{const m=location.hash.match(/^#article-(.+)$/);if(m)showArticle(m[1]);else if($('#standaloneArticle').style.display==='block'){ $('#standaloneArticle').style.display='none';document.querySelectorAll('main > section,main > .wrap,main > .collection-strip').forEach(el=>el.style.display='');}});
+ document.querySelectorAll('#guides .guide').forEach(a=>{const id=a.dataset.open;if(articleCopy[id])a.href='#article-'+id;});
+ const initial=location.hash.match(/^#article-(.+)$/);if(initial)showArticle(initial[1]);
+ // Keep all concern buttons together; remove duplicates and visually separate from product chips.
+ const concernWrap=$('#concernList');if(concernWrap){const names=new Set();concernWrap.querySelectorAll('button').forEach(b=>{const k=norm(b.textContent);if(names.has(k))b.remove();else names.add(k);});}
+ // Make product search ingredient-aware and provide useful alternatives for common absent actives.
+ const oldRender=window.render;
+})();
+</script>
+
 </body>
 </html>
