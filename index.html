@@ -75,7 +75,7 @@ h2.big{font-family:Newsreader,serif;font-weight:400;font-size:clamp(2.4rem,5vw,3
 .card{background:var(--card);border:1.5px solid var(--line);padding:24px;display:flex;flex-direction:column;transition:.3s}
 .card:hover{transform:translateY(-6px);box-shadow:0 30px 50px -30px rgba(80,50,110,.35)}
 .art{aspect-ratio:1;position:relative;display:grid;place-items:center;overflow:hidden}
-.product-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;padding:18px;background:#fff;z-index:1}.tag{z-index:2}.bt{z-index:0}.image-missing .bt{display:grid!important}.integrated-concerns{margin-top:30px;margin-bottom:16px}.integrated-concerns p{color:var(--muted);font-size:.9rem;max-width:650px}
+.product-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;padding:12px;background:#fffefc;z-index:1;display:block;transition:opacity .2s}.art.image-missing{background:linear-gradient(145deg,#f4edf7,#fffefc)!important}.art.image-missing .bt{display:grid!important;opacity:.9}.art.image-missing:after{content:"IMAGE UNAVAILABLE";position:absolute;bottom:10px;left:10px;right:10px;text-align:center;font:600 9px Inter,Arial,sans-serif;letter-spacing:.12em;color:#8b6fa6;z-index:2}.tag{z-index:2}.bt{z-index:0}.image-missing .bt{display:grid!important}.integrated-concerns{margin-top:30px;margin-bottom:16px}.integrated-concerns p{color:var(--muted);font-size:.9rem;max-width:650px}
 .tag{position:absolute;top:18px;left:18px;background:#fff;padding:9px 14px;font-size:.7rem;letter-spacing:.18em;text-transform:uppercase}
 .bt{width:20%;height:42%;border-radius:20px;position:relative;box-shadow:0 30px 30px -14px rgba(0,0,0,.22);display:grid;place-items:center;margin-top:12%}
 .bt::before{content:"";position:absolute;top:-19%;left:20%;width:60%;height:20%;background:#a79fae;border-radius:3px 3px 0 0}
@@ -539,6 +539,8 @@ const PRODUCT_IMAGES = {
   "M&S|Beauty Advent Calendar": "https://asset1.cxnmarksandspencer.com/is/image/mands/hbp61228694_is",
   "Sephora|Favorites Advent Calendar": "https://www.sephora.co.uk/media/catalog/product/s/e/sephora_favorites_advent_calendar_2026.jpg",
   "Lookfantastic|Beauty Advent Calendar": "https://s1.thcdn.com/design-assets/products/17691363/lookfantastic-beauty-advent-calendar.jpg",
+  "Cult Beauty|Signature Edition Advent Calendar": "https://www.cultbeauty.co.uk/cdn/shop/files/cult-beauty-advent-calendar-signature-edition-2026.jpg",
+  "Space NK|Beauty Advent Calendar": "https://www.spacenk.com/dw/image/v2/BCZJ_PRD/on/demandware.static/-/Sites-spacenkmastercatalog/default/dw7f0e6b8e/UK200063764.jpg",
   "The Ordinary|Niacinamide 10% + Zinc 1%": "https://theordinary.com/dw/image/v2/BCZJ_PRD/on/demandware.static/-/Sites-deciem-master/default/dw2e8a5a8d/Products/ORD/rdn-niacinamide-10pct-zinc-1pct-30ml.png",
   "La Roche-Posay|Pure Vitamin C10 Serum": "https://www.laroche-posay.co.uk/dw/image/v2/AAQP_PRD/on/demandware.static/-/Sites-lrp-master-catalog/default/dw9a1a9f8f/product/3337875660570/3337875660570.jpg",
   "Dr.G|Red Blemish Clear Soothing Cream": "https://oceanbuy.ca/cdn/shop/files/drg-drg-red-soothing-cream-70ml-oceanbuy-beauty-539878.jpg?v=1748331406&width=1080",
@@ -610,7 +612,7 @@ function render(){
   <article class="card">
     <div class="art" style="background:linear-gradient(150deg,${p.tone[0]},${p.tone[1]})">
       <span class="tag">${esc(p.tag)}</span>
-      ${PRODUCT_IMAGES[p.brand+"|"+p.name] ? `<img class="product-photo" src="${esc(PRODUCT_IMAGES[p.brand+"|"+p.name])}" alt="${esc(p.brand+" "+p.name)} product photo" loading="lazy" onerror="this.remove();this.nextElementSibling.style.display='grid';this.closest('.art').classList.add('image-missing')">` : ""}
+      ${PRODUCT_IMAGES[p.brand+"|"+p.name] ? `<img class="product-photo" src="${esc(PRODUCT_IMAGES[p.brand+"|"+p.name])}" alt="${esc(p.brand+" "+p.name)} product photo" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.onerror=null;this.style.display='none';this.closest('.art').classList.add('image-missing');this.nextElementSibling.style.display='grid'">` : ""}
       <div class="bt" style="background:linear-gradient(100deg,${p.bottle[0]},${p.bottle[1]} 50%,${p.bottle[2]});${PRODUCT_IMAGES[p.brand+"|"+p.name] ? "display:none" : ""}"><span>${esc(p.label[0])}<small>${esc(p.label[1])}</small></span></div>
     </div>
 <div class="cbrand">${esc(p.brand)} · Editorial pick</div>
